@@ -23,25 +23,28 @@ namespace BlogApp.Data.DTOs
             {
                 commentDtos.Add(new CommentDto()
                 {
-                    Id = comment.ID,
+                    Id = comment.Id,
                     Date = comment.Date,
                     AuthorName = comment.Author,
                     IsHidden = comment.IsHidden,
-                    Content = comment.IsHidden ? comment.SuspensionExplanation : comment.Content,
                     AuthorProfilePicturePath = comment.AppUser?.ProfilePicturePath ?? "default.jpg"
                 });
             }
 
+            var description = $"Joined on {blog.AppUser.RegistrationDate}";
+            if (!string.IsNullOrEmpty(blog.AppUser.Description))
+            {
+                description = blog.AppUser.Description;
+            }
             return new DetailedBlogDto()
             {
                 Id = blog.ID,
                 Title = blog.Title,
                 AuthorName = blog.Author,
-                AuthorDescription = blog.AppUser?.Description ?? string.Empty,
-                AuthorProfilePicture = blog.AppUser?.ProfilePicturePath ?? "default.jpg",
+                AuthorDescription = description,
+                AuthorProfilePicture = blog.AppUser.ProfilePicturePath,
                 Description = blog.Description,
                 IsHidden = blog.IsHidden,
-                Content = blog.IsHidden ? blog.SuspensionExplanation : blog.Content,
                 Date = blog.Date,
                 CommentDtos = commentDtos
             };

@@ -33,7 +33,6 @@ namespace BlogApp.Data.DTOs
                 ProfilePicturePath = user.ProfilePicturePath,
                 UserName = user.UserName
             };
-
         }
     }
 }

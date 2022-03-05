@@ -8,10 +8,10 @@ namespace BlogApp.Models
 {
     public class Comment : Post
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         [Required, MaxLength(250)]
         public override string Content { get; set; }
         [Required]
-        public int BlogID { get; set; }
+        public int BlogId { get; set; }
     }
 }

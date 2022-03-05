@@ -11,7 +11,7 @@ namespace BlogApp.Models
         public int ID { get; set; }
         [Required]
         public string Title { get; set; }
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; set; }
         public int ViewCount { get; set; } = 0;
         [Required]
         public string ImagePath { get; set; }
