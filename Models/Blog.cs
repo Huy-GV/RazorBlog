@@ -8,13 +8,19 @@ namespace BlogApp.Models
 {
     public class Blog : Post
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
+
         [Required]
         public string Title { get; set; }
+
         public string Description { get; set; }
         public int ViewCount { get; set; } = 0;
+
         [Required]
         public string ImagePath { get; set; }
+
+        public int TopicId { get; set; }
+        public Topic Topic { get; set; }
         public ICollection<Comment> Comments { get; set; }
     }
 }

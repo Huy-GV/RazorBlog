@@ -38,7 +38,7 @@
                     <a class="edit-post"
                         asp-page="/Blogs/Edit" 
                         asp-route-username="@user.UserName"
-                        asp-route-blogID="@Model.Blog.ID">Edit</a>
+                        asp-route-blogID="@Model.Blog.Id">Edit</a>
                 }
                 if (userRoles.Contains(Roles.ModeratorRole)
                     && Model.DetailedBlogDto.AuthorName != "admin"
@@ -87,7 +87,7 @@
 @if (!isSuspended && User.Identity.IsAuthenticated) 
 {
     <form method="post" class="comment-form" asp-page-handler="CreateComment">
-        <input asp-for="CreateCommentViewModel.BlogId" value="@Model.Blog.ID" type="hidden" />
+        <input asp-for="CreateCommentViewModel.BlogId" value="@Model.Blog.Id" type="hidden" />
         <p>
             <textarea rows="5" cols="50"
                       asp-for="CreateCommentViewModel.Content"

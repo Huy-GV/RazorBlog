@@ -19,28 +19,20 @@ namespace BlogApp.Pages.Blogs
     {
         [BindProperty]
         public CreateBlogViewModel CreateBlogVM { get; set; }
-        private readonly UserModerationService _suspensionService;
         private readonly IImageService _imageService;
         public CreateModel(
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
             ILogger<CreateModel> logger,
-            IImageService imageService,
-            UserModerationService suspensionService) : base(
+            IImageService imageService) : base(
                 context, userManager, logger)
         {
             _imageService = imageService;
-            _suspensionService = suspensionService;
         }
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await UserManager.GetUserAsync(User);
             var username = user.UserName;
-
-            if (await _suspensionService.ExistsAsync(username))
-            {
-                return RedirectToPage("./Index");
-            }
 
             return Page();
         }
@@ -48,11 +40,6 @@ namespace BlogApp.Pages.Blogs
         {
             var user = await UserManager.GetUserAsync(User);
             var username = user.UserName;
-
-            if (await _suspensionService.ExistsAsync(username))
-            {
-                return RedirectToPage("./Index");
-            }
 
             if (!ModelState.IsValid)
             {
@@ -69,8 +56,7 @@ namespace BlogApp.Pages.Blogs
                 {
                     ImagePath = imageName,
                     Date = DateTime.Now,
-                    Author = user.UserName,
-                    AppUserID = user.Id
+                    AppUserId = user.Id
                 });
 
                 entry.CurrentValues.SetValues(CreateBlogVM);

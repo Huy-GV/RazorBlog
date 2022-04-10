@@ -21,7 +21,7 @@
     @foreach (var blog in Model.Blogs)
     {
         <a class="blog" asp-page="/Blogs/Read" 
-                        asp-route-id="@blog.ID">
+                        asp-route-id="@blog.Id">
             <img src="/images/blogs/@blog.ImagePath">
             <div class="blog-info">
                 <span class="info">@blog.Author on @blog.Date.ToString("dd MMM yyyy")</span>

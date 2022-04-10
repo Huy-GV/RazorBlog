@@ -44,7 +44,7 @@ namespace BlogApp.Pages.Blogs
             
             EditBlogVM = new EditBlogViewModel
             { 
-                Id = blog.ID,
+                Id = blog.Id,
                 Title = blog.Title,
                 Content = blog.Content,
                 Description = blog.Description
@@ -66,7 +66,7 @@ namespace BlogApp.Pages.Blogs
             if (blog == null)
                 return NotFound();
             if (EditBlogVM.Content == "")
-                return RedirectToPage("/Blogs/Read", new { id = blog.ID });
+                return RedirectToPage("/Blogs/Read", new { id = blog.Id });
             if (user.UserName != blog.Author)
                 return Forbid();
 
@@ -92,7 +92,7 @@ namespace BlogApp.Pages.Blogs
 
             DbContext.Attach(blog).State = EntityState.Modified;
             await DbContext.SaveChangesAsync();
-            return RedirectToPage("/Blogs/Read", new { id = blog.ID });
+            return RedirectToPage("/Blogs/Read", new { id = blog.Id });
         }
     }
 }

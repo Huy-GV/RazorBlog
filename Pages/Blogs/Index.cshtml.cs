@@ -17,28 +17,32 @@ namespace BlogApp.Pages.Blogs
     public class IndexModel : BasePageModel<IndexModel>
     {
         public IEnumerable<Blog> Blogs { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
+
         public IndexModel(
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
             ILogger<IndexModel> logger) : base(
                 context, userManager, logger)
         {
-
         }
+
         public async Task OnGetAsync()
         {
-            IQueryable<Blog> blogs = from blog in DbContext.Blog
-                    select blog;
+            var blogs = DbContext.Blog
+                .Include(b => b.AppUser)
+                // .Include(b => b.Topic)
+                .AsNoTracking();
 
-            if (!string.IsNullOrEmpty(SearchString)) 
+            if (!string.IsNullOrEmpty(SearchString))
             {
                 SearchString = SearchString.ToLower().Trim();
-                blogs = from blog in blogs.AsNoTracking()
-                        where blog.Title.ToLower().Contains(SearchString) 
-                        || blog.Author.ToLower().Contains(SearchString)
-                        select blog;
+                blogs = blogs.Where(b =>
+                    b.AppUser.UserName.Contains(SearchString) ||
+                    // b.Topic.Name.Contains(SearchString) ||
+                    b.Title.Contains(SearchString));
             }
 
             Blogs = await blogs.ToListAsync();

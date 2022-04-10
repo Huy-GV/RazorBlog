@@ -11,32 +11,33 @@ using BlogApp.Data.DTOs;
 using BlogApp.Data.Constants;
 using BlogApp.Data.ViewModel;
 using BlogApp.Services;
+
 namespace BlogApp.Pages.Blogs
 {
-
     [AllowAnonymous]
     public class ReadModel : BasePageModel<ReadModel>
     {
         [BindProperty]
         public CreateCommentViewModel CreateCommentViewModel { get; set; }
+
         [BindProperty]
         public EditCommentViewModel EditCommentViewModel { get; set; }
-        private readonly UserModerationService _moderationService;
+
         public Blog Blog { get; set; }
         public DetailedBlogDto DetailedBlogDto { get; set; }
+
         public ReadModel(
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
-            ILogger<ReadModel> logger,
-            UserModerationService moderationService) : base(
+            ILogger<ReadModel> logger) : base(
                 context, userManager, logger)
         {
-            _moderationService = moderationService;
         }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null) {
+            if (id == null)
+            {
                 return NotFound();
             }
 
@@ -45,7 +46,7 @@ namespace BlogApp.Pages.Blogs
                 .Include(blog => blog.Comments)
                     .ThenInclude(comment => comment.AppUser)
                 .AsNoTracking()
-                .SingleOrDefaultAsync(blog => blog.ID == id);
+                .SingleOrDefaultAsync(blog => blog.Id == id);
 
             if (Blog == null)
             {
@@ -54,15 +55,13 @@ namespace BlogApp.Pages.Blogs
 
             await IncrementViewCountAsync(id.Value);
             ViewData["IsSuspended"] = false;
-            if (User.Identity.IsAuthenticated)
-            {
-                ViewData["IsSuspended"] = await _moderationService.ExistsAsync(User.Identity.Name);
-            }
 
             DetailedBlogDto = DetailedBlogDto.From(Blog);
 
             return Page();
         }
+
+        // todo: track this.
         private async Task IncrementViewCountAsync(int id)
         {
             //get blog again to avoid tracking errors
@@ -71,6 +70,7 @@ namespace BlogApp.Pages.Blogs
             DbContext.Blog.Update(blog);
             await DbContext.SaveChangesAsync();
         }
+
         public async Task<IActionResult> OnPostCreateCommentAsync()
         {
             if (!User.Identity.IsAuthenticated)
@@ -94,14 +94,10 @@ namespace BlogApp.Pages.Blogs
             //     BlogID = CreateCommentVM.BlogID
             // };
 
-            if (await _moderationService.ExistsAsync(username))
-                return RedirectToPage("/Blogs/Read", new { id = CreateCommentViewModel.BlogId });
-
             var entry = DbContext.Comment.Add(new Comment
             {
-                Author = user.UserName,
                 Date = DateTime.Now,
-                AppUserID = user.Id
+                AppUserId = user.Id
             });
 
             entry.CurrentValues.SetValues(CreateCommentViewModel);
@@ -109,6 +105,7 @@ namespace BlogApp.Pages.Blogs
 
             return RedirectToPage("/Blogs/Read", new { id = CreateCommentViewModel.BlogId });
         }
+
         public async Task<IActionResult> OnPostEditCommentAsync(int commentID)
         {
             if (!User.Identity.IsAuthenticated)
@@ -128,8 +125,9 @@ namespace BlogApp.Pages.Blogs
             comment.Content = EditCommentViewModel.Content;
             await DbContext.SaveChangesAsync();
 
-            return RedirectToPage("/Blogs/Read", new { id = comment.BlogID });
+            return RedirectToPage("/Blogs/Read", new { id = comment.BlogId });
         }
+
         public async Task<IActionResult> OnPostHideBlogAsync(int blogID)
         {
             if (!User.Identity.IsAuthenticated)
@@ -137,25 +135,24 @@ namespace BlogApp.Pages.Blogs
 
             var user = await UserManager.GetUserAsync(User);
             var roles = await UserManager.GetRolesAsync(user);
-            
-            if (!(roles.Contains(Roles.AdminRole) || 
-                roles.Contains(Roles.ModeratorRole))) 
+
+            if (!(roles.Contains(Roles.AdminRole) ||
+                roles.Contains(Roles.ModeratorRole)))
                 return Forbid();
 
             var blog = await DbContext.Blog.FindAsync(blogID);
             if (blog == null)
                 return NotFound();
-            
+
             if (blog.Author == "admin")
                 return Forbid();
-
 
             // blog.SuspensionExplanation = Messages.InappropriateBlog;
             // await DbContext.SaveChangesAsync();
 
-            await _moderationService.HideBlogAsync(blogID);
             return RedirectToPage("/Blogs/Read", new { id = blogID });
         }
+
         public async Task<IActionResult> OnPostHideCommentAsync(int commentID)
         {
             if (!User.Identity.IsAuthenticated)
@@ -163,24 +160,20 @@ namespace BlogApp.Pages.Blogs
 
             var user = await UserManager.GetUserAsync(User);
             var roles = await UserManager.GetRolesAsync(user);
-            if (!(roles.Contains(Roles.AdminRole) 
-                || roles.Contains(Roles.ModeratorRole))) 
+            if (!(roles.Contains(Roles.AdminRole)
+                || roles.Contains(Roles.ModeratorRole)))
                 return Forbid();
 
             var comment = await DbContext.Comment.FindAsync(commentID);
             if (comment == null)
                 return NotFound();
-            
+
             if (comment.Author == "admin")
                 return Forbid();
 
-
-            // comment.SuspensionExplanation = Messages.InappropriateComment;
-            // await DbContext.SaveChangesAsync();
-
-            await _moderationService.HideCommentAsync(commentID);
-            return RedirectToPage("/Blogs/Read", new { id = comment.BlogID });
+            return RedirectToPage("/Blogs/Read", new { id = comment.BlogId });
         }
+
         public async Task<IActionResult> OnPostDeleteBlogAsync(int blogID)
         {
             if (!User.Identity.IsAuthenticated)
@@ -196,11 +189,12 @@ namespace BlogApp.Pages.Blogs
 
             return RedirectToPage("/Blogs/Index");
         }
+
         public async Task<IActionResult> OnPostDeleteCommentAsync(int commentID)
         {
             if (!User.Identity.IsAuthenticated)
                 return Challenge();
-            
+
             var comment = await DbContext.Comment.FindAsync(commentID);
 
             if (User.Identity.Name != comment.Author && !User.IsInRole(Roles.AdminRole))
@@ -209,7 +203,7 @@ namespace BlogApp.Pages.Blogs
             DbContext.Comment.Remove(comment);
             await DbContext.SaveChangesAsync();
 
-            return RedirectToPage("/Blogs/Read", new { id = comment.BlogID });
+            return RedirectToPage("/Blogs/Read", new { id = comment.BlogId });
         }
     }
 }

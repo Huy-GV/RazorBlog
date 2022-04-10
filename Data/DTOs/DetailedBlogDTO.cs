@@ -38,7 +38,7 @@ namespace BlogApp.Data.DTOs
             }
             return new DetailedBlogDto()
             {
-                Id = blog.ID,
+                Id = blog.Id,
                 Title = blog.Title,
                 AuthorName = blog.Author,
                 AuthorDescription = description,

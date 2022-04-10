@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlogApp.Models
 {
-    public class Community : IEntity, ISoftDeletable
+    public class Topic : IEntity, ISoftDeletable
     {
         public int Id { get; set; }
         public string Name { get; set; }    

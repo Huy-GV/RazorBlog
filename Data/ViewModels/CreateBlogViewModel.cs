@@ -6,7 +6,6 @@ namespace BlogApp.Data.ViewModel
 {
     public class CreateBlogViewModel
     {
-        
         [Required]
         [StringLength(60, MinimumLength = 10)]
         public string Title { get; set; }

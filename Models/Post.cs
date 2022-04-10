@@ -10,11 +10,13 @@ namespace BlogApp.Models
     {
         [Required, MaxLength(2500)]
         public virtual string Content { get; set; }
+
         [MaxLength(255)]
         [DataType("date"), Required]
         public DateTime Date { get; set; }
+
         public string Author => AppUser.UserName;
-        public string AppUserID { get; set; }
+        public string AppUserId { get; set; }
         public ApplicationUser AppUser { get; set; }
         public bool IsHidden { get; set; }
     }
