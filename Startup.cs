@@ -2,20 +2,15 @@
 using BlogApp.Interfaces;
 using BlogApp.Models;
 using BlogApp.Services;
-using Microsoft.AspNetCore.Authorization;
+using BlogApp.Services.Implementations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlogApp
 {
@@ -32,8 +27,10 @@ namespace BlogApp
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddDbContext<RazorBlogDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                .AddDbContext<RazorBlogDbContext>(options =>
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                });
             services.AddDatabaseDeveloperPageExceptionFilter();
             services
                 .AddIdentity<ApplicationUser, IdentityRole>()
@@ -43,8 +40,7 @@ namespace BlogApp
             services.AddRazorPages();
             services
                 .AddMvc()
-                .AddRazorPagesOptions(
-                options =>
+                .AddRazorPagesOptions(options =>
                 {
                     options.Conventions.AddPageRoute("/Blogs/Index", "");
                 });
@@ -56,7 +52,7 @@ namespace BlogApp
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 6;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
                 options.User.RequireUniqueEmail = false;
                 options.SignIn.RequireConfirmedEmail = false;
             });
@@ -64,7 +60,7 @@ namespace BlogApp
             services.AddAuthorization();
 
             //TODO: configure cookie options
-            services.ConfigureApplicationCookie(options => 
+            services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
@@ -73,7 +69,7 @@ namespace BlogApp
             });
 
             //transient because service is stateless and lightweight
-            services.AddTransient<IImageService, ImageService>(); 
+            //services.AddTransient<IImageService, ImageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

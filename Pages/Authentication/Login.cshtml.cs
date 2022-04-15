@@ -23,7 +23,7 @@ namespace BlogApp.Pages.Authentication
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, 
+        public LoginModel(SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<ApplicationUser> userManager)
         {
@@ -33,11 +33,13 @@ namespace BlogApp.Pages.Authentication
         }
 
         [BindProperty]
-        public LogInViewModel LogInViewModel { get; set; }
+        public SignInViewModel LogInViewModel { get; set; }
+
         public string ReturnUrl { get; set; }
 
         [TempData]
         public string ErrorMessage { get; set; }
+
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -61,9 +63,9 @@ namespace BlogApp.Pages.Authentication
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(
-                    LogInViewModel.UserName, 
-                    LogInViewModel.Password, 
-                    LogInViewModel.RememberMe, 
+                    LogInViewModel.UserName,
+                    LogInViewModel.Password,
+                    LogInViewModel.RememberMe,
                     lockoutOnFailure: false);
 
                 if (result.Succeeded)

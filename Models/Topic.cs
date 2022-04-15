@@ -1,19 +1,24 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BlogApp.Models
+namespace BlogApp.Models;
+
+[Table(nameof(Topic))]
+public class Topic : IEntity, ISoftDeletable
 {
-    public class Topic : IEntity, ISoftDeletable
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }    
-        [DataType(DataType.Date)]
-        public DateTime CreationDate { get; set; }
-        public string CreatorUserId { get; set; }
-        [DataType("nvarchar(150)")]
-        public string Description { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public DateTime DeleteDate { get; set; } = DateTime.Now;
-        public ApplicationUser Creator { get; set; }
-    }
+    public int Id { get; set; }
+    public string Name { get; set; }
+
+    [DataType(DataType.Date)]
+    public DateTime CreationDate { get; set; }
+
+    public string CreatorUserId { get; set; }
+
+    [DataType("nvarchar(150)")]
+    public string Description { get; set; }
+
+    public bool IsDeleted { get; set; } = false;
+    public DateTime DeleteDate { get; set; } = DateTime.Now;
+    public ApplicationUser Creator { get; set; }
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace BlogApp.Data.ViewModel
 {
-    public class CreateUserViewModel
+    public class RegisterViewModel
     {
         [Required]
         [Display(Name = "UserName")]

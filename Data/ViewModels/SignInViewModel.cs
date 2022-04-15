@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace BlogApp.Data.ViewModel{
-    public class LogInViewModel
+    public class SignInViewModel
     {
         [Required]
         [Display(Name = "Username")]

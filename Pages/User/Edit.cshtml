@@ -24,8 +24,8 @@
                     asp-for="EditUserViewModel.Description"
                     required>@Model.EditUserViewModel.Description</textarea>
 
-            <label asp-for="EditUserViewModel.NewProfilePicture"><strong>Profile picture</strong></label>
-            <input type="file" asp-for="EditUserViewModel.NewProfilePicture" accept=".png,.jpg,.jpeg" multiple>
+@*            <label asp-for="EditUserViewModel.NewProfilePicture"><strong>Profile picture</strong></label>
+            <input type="file" asp-for="EditUserViewModel.NewProfilePicture" accept=".png,.jpg,.jpeg" multiple>*@
         </div>
         <br>
         <input type="hidden" value="@Model.EditUserViewModel.UserName" asp-for="EditUserViewModel.UserName"/>

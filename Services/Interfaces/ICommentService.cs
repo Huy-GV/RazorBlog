@@ -1,15 +1,19 @@
-﻿using BlogApp.Data.DTOs;
-using BlogApp.Services.Results;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace BlogApp.Services.Interfaces
+﻿namespace BlogApp.Services.Interfaces
 {
+    using BlogApp.Data.DTOs;
+    using BlogApp.Data.ViewModel;
+    using BlogApp.Services.Communications;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     public interface ICommentService
     {
         public Task<IList<CommentDto>> GetAllCommentsAsync(int blogId);
-        public Task<ServiceResult> CreateCommentAsync(int blogId);
-        public Task<ServiceResult> UpdateCommentAsync();
-        public Task<ServiceResult> DeleteCommentAsync(int commentId);
+
+        public Task<Result> CreateCommentAsync(int blogId, CreateCommentViewModel commentViewModel);
+
+        public Task<Result> UpdateCommentAsync(int commentId, int blogId);
+
+        public Task<Result> DeleteCommentAsync(int commentId);
     }
 }

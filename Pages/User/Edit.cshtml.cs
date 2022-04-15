@@ -24,10 +24,12 @@ namespace BlogApp.Pages.User
     public class EditModel : BasePageModel<EditModel>
     {
         [BindProperty]
-        public EditUserViewModel EditUserViewModel { get; set; }
+        public PersonalDetailsViewModel EditUserViewModel { get; set; }
+
         private readonly ILogger<EditModel> _logger;
         private readonly IImageService _imageService;
-        public EditModel(      
+
+        public EditModel(
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
             ILogger<EditModel> logger,
@@ -36,6 +38,7 @@ namespace BlogApp.Pages.User
             _logger = logger;
             _imageService = imageService;
         }
+
         public async Task<IActionResult> OnGetAsync(string? username)
         {
             if (username == null)
@@ -49,13 +52,12 @@ namespace BlogApp.Pages.User
                 return NotFound();
             }
 
-
             if (user.UserName != User.Identity.Name)
             {
                 return Forbid();
             }
 
-            EditUserViewModel = new EditUserViewModel()
+            EditUserViewModel = new PersonalDetailsViewModel()
             {
                 UserName = username,
                 Country = user.Country,
@@ -64,8 +66,9 @@ namespace BlogApp.Pages.User
 
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync() 
-        {   
+
+        public async Task<IActionResult> OnPostAsync()
+        {
             var user = await UserManager.FindByNameAsync(EditUserViewModel.UserName);
             if (user == null)
             {
@@ -80,7 +83,7 @@ namespace BlogApp.Pages.User
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values
-                    .SelectMany( m => m.Errors)
+                    .SelectMany(m => m.Errors)
                     .Select(e => e.ErrorMessage);
 
                 foreach (var error in errors)
@@ -94,30 +97,31 @@ namespace BlogApp.Pages.User
             var applicationUser = await DbContext.ApplicationUser.FindAsync(user.Id);
             DbContext.Attach(applicationUser).CurrentValues.SetValues(EditUserViewModel);
 
-            if (EditUserViewModel.NewProfilePicture != null) 
-            {
-                _imageService.DeleteImage(applicationUser.ProfilePicturePath);
-                applicationUser.ProfilePicturePath = await 
-                    GetProfilePicturePath(EditUserViewModel);
-            }
+            //if (EditUserViewModel.NewProfilePicture != null)
+            //{
+            //    _imageService.DeleteImage(applicationUser.ProfilePicturePath);
+            //    applicationUser.ProfilePicturePath = await
+            //        GetProfilePicturePath(EditUserViewModel);
+            //}
 
             DbContext.Attach(applicationUser).State = EntityState.Modified;
             await DbContext.SaveChangesAsync();
 
             return RedirectToPage("/User/Index", new { username = EditUserViewModel.UserName });
         }
-        private async Task<string> GetProfilePicturePath(EditUserViewModel editUser) 
+
+        private async Task<string> GetProfilePicturePath(PersonalDetailsViewModel editUser)
         {
             string fileName = string.Empty;
-            try
-            {
-                fileName = _imageService.BuildFileName(editUser.NewProfilePicture.FileName);
-                await _imageService.UploadProfileImageAsync(EditUserViewModel.NewProfilePicture, fileName);
-            } 
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to upload new profile picture: {ex}");
-            }
+            //try
+            //{
+            //    fileName = _imageService.BuildFileName(editUser.NewProfilePicture.FileName);
+            //    await _imageService.UploadProfileImageAsync(EditUserViewModel.NewProfilePicture, fileName);
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError($"Failed to upload new profile picture: {ex}");
+            //}
 
             return fileName;
         }

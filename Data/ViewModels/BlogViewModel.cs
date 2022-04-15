@@ -1,12 +1,9 @@
-using System;
+﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Http;
 
-namespace BlogApp.Data.ViewModel
+namespace BlogApp.Data.ViewModels
 {
-    [Obsolete]
-    public class CreateBlogViewModel
+    public class BlogViewModel : PostViewModel
     {
         [Required]
         [StringLength(60, MinimumLength = 10)]
@@ -14,13 +11,14 @@ namespace BlogApp.Data.ViewModel
 
         [Required]
         [StringLength(2000, MinimumLength = 200)]
-        public string Content { get; set; }
+        public override string Content { get; set; }
 
         [Required]
         [StringLength(200, MinimumLength = 10)]
         public string Description { get; set; }
 
-        [Display(Name = "Cover image")]
+        public int TopicId { get; set; }
+
         [Required]
         public IFormFile CoverImage { get; set; }
     }

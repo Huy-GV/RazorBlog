@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace BlogApp.Data.ViewModel
 {
-    public class EditUserViewModel
+    public class PersonalDetailsViewModel
     {
         public string UserName { get; set; }
         [Required]
@@ -12,6 +12,5 @@ namespace BlogApp.Data.ViewModel
         [Required]
         [StringLength(350, MinimumLength = 20)]
         public string Description { get; set; }
-        public IFormFile? NewProfilePicture { get; set; }
     }
 }

@@ -51,7 +51,7 @@ namespace BlogApp.Data
 
             #endregion BanTicket
 
-            #region Community
+            #region Topic
 
             modelBuilder.Entity<Topic>()
                 .HasOne(c => c.Creator)
@@ -62,7 +62,7 @@ namespace BlogApp.Data
             modelBuilder.Entity<Topic>()
                 .HasQueryFilter(cm => !cm.IsDeleted);
 
-            #endregion Community
+            #endregion Topic
 
             #region ModeratorAssignment
 
