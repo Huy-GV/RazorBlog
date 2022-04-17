@@ -1,14 +1,14 @@
-using RazorBlog.Data;
-using RazorBlog.Data.DTOs;
-using RazorBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using RazorBlog.Data;
+using RazorBlog.Data.DTOs;
+using RazorBlog.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace RazorBlog.Pages.User
 {
@@ -53,7 +53,7 @@ namespace RazorBlog.Pages.User
             {
                 UserName = username,
                 BlogCount = blogs.Count,
-                ProfilePicturePath = user.ProfilePicturePath,
+                ProfilePicturePath = user.ProfileImageUri,
                 Blogs = blogs,
                 Description = user.Description,
                 CommentCount = DbContext.Comment
@@ -67,8 +67,7 @@ namespace RazorBlog.Pages.User
                 ViewCountCurrentYear = blogs
                     .Where(blog => blog.Author == username && blog.Date.Year == DateTime.Now.Year)
                     .Sum(blogs => blogs.ViewCount),
-                Country = user.Country,
-                RegistrationDate = user.RegistrationDate?.ToString("dd MM yyyy") ?? "",
+                RegistrationDate = user.RegistrationDate.ToString("dd MM yyyy") ?? "",
             };
 
             return Page();

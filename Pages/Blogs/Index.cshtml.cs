@@ -1,15 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using RazorBlog.Data;
+using RazorBlog.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
-using RazorBlog.Data;
-using RazorBlog.Models;
-using Microsoft.AspNetCore.Identity;
-using RazorBlog.Pages;
-using Microsoft.Extensions.Logging;
 
 namespace RazorBlog.Pages.Blogs
 {

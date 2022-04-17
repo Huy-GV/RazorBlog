@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using RazorBlog.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RazorBlog.Data.Constants;
+using RazorBlog.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace RazorBlog.Data
 {
@@ -19,6 +17,7 @@ namespace RazorBlog.Data
             await AssignAdminRole(adminID, Roles.AdminRole, serviceProvider);
             await CreateModeratorRole(serviceProvider);
         }
+
         private static async Task<string> EnsureAdmin(IServiceProvider serviceProvider, string username)
         {
             var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
@@ -30,9 +29,7 @@ namespace RazorBlog.Data
                 {
                     UserName = username,
                     EmailConfirmed = true,
-                    RegistrationDate = DateTime.UtcNow,
-                    Country = "Australia",
-                    ProfilePicturePath = "default.jpg",
+                    ProfileImageUri = "default.jpg",
                     Description = "Lorem ipsum dolor sed temda met sedim ips dolor sed temda met sedim ips dolor sed temda met sedim ips"
                 };
                 await userManager.CreateAsync(user, "Admin123@@");
@@ -40,9 +37,10 @@ namespace RazorBlog.Data
 
             return user.Id;
         }
+
         private static async Task AssignAdminRole(
-            string userID, 
-            string role, 
+            string userID,
+            string role,
             IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
@@ -56,8 +54,8 @@ namespace RazorBlog.Data
 
             if (!(await userManager.GetRolesAsync(user)).Contains(Roles.AdminRole))
                 await userManager.AddToRoleAsync(user, role);
-            
         }
+
         private static async Task CreateModeratorRole(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();

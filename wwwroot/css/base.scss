@@ -1,7 +1,8 @@
 .smooth-transition {
     transition: 180ms ease-in;
-    &:hover{
-        transition: 180ms ease-in; 
+
+    &:hover {
+        transition: 180ms ease-in;
     }
 }
 
@@ -12,14 +13,14 @@ $primary-purple: rgb(99, 0, 148);
 $medium-screen-width: 1000px;
 $small-screen-width: 700px;
 
-
 .button {
     box-shadow: $button-shadow;
     @extend .smooth-transition;
     border-radius: 4px;
+
     &:hover {
         cursor: pointer;
-    } 
+    }
 }
 
 .primary-button {
@@ -27,10 +28,9 @@ $small-screen-width: 700px;
     border: none;
     background-color: $primary-purple;
     text-decoration: none;
-    
     color: white;
 
-    &:hover{
+    &:hover {
         filter: brightness(0.8);
     }
 }
@@ -48,12 +48,14 @@ $small-screen-width: 700px;
 }
 
 .card {
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    ;
     border-radius: 5px;
 }
 
 .clickable-card {
-    box-shadow: 0 5px 6px rgba(0,0,0,0.1);;
+    box-shadow: 0 5px 6px rgba(0,0,0,0.1);
+    ;
     border-radius: 5px;
     @extend .smooth-transition;
 
@@ -61,4 +63,3 @@ $small-screen-width: 700px;
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
     }
 }
-

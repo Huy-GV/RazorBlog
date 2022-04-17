@@ -4,7 +4,7 @@
     font-size: 20px;
 }
 
-body { 
+body {
     margin: 0;
 }
 
@@ -19,11 +19,11 @@ body {
 
     @media screen and (max-width: $medium-screen-width) {
         width: 70%;
-    } 
+    }
 
     @media screen and (max-width: $small-screen-width) {
         width: 80%;
-    } 
+    }
 }
 
 .text-input {
@@ -55,7 +55,7 @@ nav {
     @media screen and (max-width: $medium-screen-width) {
         padding-inline: 1rem;
     }
-    
+
     @media screen and (max-width: $small-screen-width) {
         padding-inline: 0.5rem;
         height: 2.5rem;
@@ -82,6 +82,7 @@ nav {
     img {
         height: 2.8rem;
         align-self: center;
+
         @media screen and (max-width: $small-screen-width) {
             height: 2.3rem;
         }
@@ -98,11 +99,12 @@ nav {
             margin-inline: 1rem;
             padding-block: 0.4rem;
             border-right: 2px solid gray;
+
             @media screen and (max-width: $small-screen-width) {
                 margin-inline: 0.5rem;
             }
         }
-        
+
         .log-btn {
             padding: 0.6rem;
             font-size: 0.8rem;
@@ -127,7 +129,7 @@ nav + * {
 }
 
 .suspended-post {
-    color:red;
+    color: red;
 }
 
 p {
@@ -159,7 +161,7 @@ label {
     margin-block: 1rem;
 }
 
-.button-container{
+.button-container {
     display: flex;
     flex-direction: column;
     justify-content: center;

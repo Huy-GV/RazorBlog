@@ -42,7 +42,7 @@
 
     @media screen and (max-width: $medium-screen-width) {
         width: 80%;
-    } 
+    }
 }
 
 .suspend-form {
@@ -59,8 +59,8 @@
     font-size: medium;
 }
 
-.confirm-ban-btn:hover, .lift-ban-btn:hover, .ban-btn:hover, 
-.cancel-btn:hover, .un-hide-post:hover, .delete-post:hover{
+.confirm-ban-btn:hover, .lift-ban-btn:hover, .ban-btn:hover,
+.cancel-btn:hover, .un-hide-post:hover, .delete-post:hover {
     cursor: pointer;
     filter: brightness(0.6);
 }
@@ -70,7 +70,7 @@
     border: 1px solid rgb(42, 214, 42);
     width: 100%;
     box-shadow: 0 3px 15px rgba(0,0,0,0.3);
-    color:white;
+    color: white;
 }
 
 .ban-btn {

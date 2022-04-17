@@ -1,6 +1,5 @@
-﻿namespace RazorBlog.Models
+﻿namespace RazorBlog.Models;
+
+public interface IEntity
 {
-    public interface IEntity
-    {
-    }
 }

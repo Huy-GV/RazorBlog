@@ -1,16 +1,16 @@
 ﻿namespace RazorBlog.Services.Implementations
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Logging;
+    using RazorBlog.Data;
+    using RazorBlog.Data.Mappers;
     using RazorBlog.Data.ViewModel;
     using RazorBlog.Models;
     using RazorBlog.Services.Communications;
     using RazorBlog.Services.Interfaces;
-    using Microsoft.AspNetCore.Identity;
-    using System.Threading.Tasks;
-    using RazorBlog.Data.Mappers;
     using System;
-    using Microsoft.Extensions.Logging;
     using System.Linq;
-    using RazorBlog.Data;
+    using System.Threading.Tasks;
 
     public class AuthenticationService : IAuthenticationService
     {
@@ -30,6 +30,7 @@
             _logger = logger;
             _context = context;
         }
+
         public Task<Result> ChangePassword(string password)
         {
             throw new System.NotImplementedException();
@@ -42,7 +43,6 @@
             {
                 return AuthenticationResultMapper.Error(ServiceCode.NotFound, "No user with ID {userId} was found");
             }
-
 
             _context.Update(user);
             user.DeleteDate = DateTime.Now;
@@ -59,9 +59,7 @@
             {
                 UserName = viewModel.UserName,
                 EmailConfirmed = true,
-                RegistrationDate = DateTime.Now,
-                ProfilePicturePath = profileUri,
-                Country = viewModel.Country
+                ProfileImageUri = profileUri,
             };
 
             var result = await _userManager.CreateAsync(user, viewModel.Password);
@@ -73,7 +71,7 @@
             }
 
             var errors = result.Errors
-                .Select(x => new 
+                .Select(x => new
                 {
                     x.Code,
                     x.Description,

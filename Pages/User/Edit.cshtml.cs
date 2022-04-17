@@ -1,22 +1,14 @@
-using RazorBlog.Data;
-using RazorBlog.Data.DTOs;
-using RazorBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.Extensions.Logging;
-using RazorBlog.Services;
+using RazorBlog.Data;
 using RazorBlog.Data.ViewModel;
 using RazorBlog.Interfaces;
+using RazorBlog.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RazorBlog.Pages.User
 {
@@ -60,7 +52,6 @@ namespace RazorBlog.Pages.User
             EditUserViewModel = new PersonalDetailsViewModel()
             {
                 UserName = username,
-                Country = user.Country,
                 Description = user.Description
             };
 

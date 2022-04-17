@@ -3,6 +3,15 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>aspnet-BlogApp-ED49C29B-6D6C-4506-B3D3-B3C3454112CE</UserSecretsId>
+	  <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702,8618</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702,8618</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

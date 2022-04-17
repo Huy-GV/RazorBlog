@@ -1,6 +1,6 @@
-﻿using System;
+﻿using RazorBlog.Models;
+using System;
 using System.Collections.Generic;
-using RazorBlog.Models;
 
 namespace RazorBlog.Data.DTOs
 {
@@ -16,6 +16,7 @@ namespace RazorBlog.Data.DTOs
         public DateTime Date { get; set; }
         public bool IsHidden { get; set; }
         public ICollection<CommentDto> CommentDtos { get; set; }
+
         public static DetailedBlogDto From(Blog blog)
         {
             List<CommentDto> commentDtos = new();
@@ -27,7 +28,7 @@ namespace RazorBlog.Data.DTOs
                     Date = comment.Date,
                     AuthorName = comment.Author,
                     IsHidden = comment.IsHidden,
-                    AuthorProfilePicturePath = comment.AppUser?.ProfilePicturePath ?? "default.jpg"
+                    AuthorProfilePicturePath = comment.AppUser?.ProfileImageUri ?? "default.jpg"
                 });
             }
 
@@ -42,7 +43,7 @@ namespace RazorBlog.Data.DTOs
                 Title = blog.Title,
                 AuthorName = blog.Author,
                 AuthorDescription = description,
-                AuthorProfilePicture = blog.AppUser.ProfilePicturePath,
+                AuthorProfilePicture = blog.AppUser.ProfileImageUri,
                 Description = blog.Description,
                 IsHidden = blog.IsHidden,
                 Date = blog.Date,

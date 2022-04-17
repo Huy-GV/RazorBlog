@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using RazorBlog.Data.ValidationAttributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace RazorBlog.Data.ViewModels
@@ -20,6 +21,7 @@ namespace RazorBlog.Data.ViewModels
         public int TopicId { get; set; }
 
         [Required]
+        [FileTypeAttribute(".jpg", ".jpeg", ".png", ErrorMessage = "Only jpg/jpeg and png files are allowed")]
         public IFormFile CoverImage { get; set; }
     }
 }

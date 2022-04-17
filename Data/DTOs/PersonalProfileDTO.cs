@@ -1,14 +1,11 @@
-﻿using System;
+﻿using RazorBlog.Models;
 using System.Collections.Generic;
-using System.Linq;
-using RazorBlog.Models;
-using System.Threading.Tasks;
 
 namespace RazorBlog.Data.DTOs
 {
     public class PersonalProfileDto : BaseProfileDto
     {
-        public string Country { get; set; } 
+        public string Country { get; set; }
         public string Description { get; set; } = "None";
         public string RegistrationDate { get; set; }
         public bool IsModerator { get; set; } = false;

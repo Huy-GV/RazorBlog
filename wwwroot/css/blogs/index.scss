@@ -1,9 +1,8 @@
 @import "../base.scss";
 
-
 .info-text {
     font-size: 0.7rem;
-    
+
     &:hover {
         cursor: pointer;
         transition: 100ms ease-out;
@@ -51,15 +50,14 @@
     align-items: center;
     justify-items: center;
     justify-content: center;
-    width: #{"min(800rem, 90%);"} ;
+    width: #{"min(800rem, 90%);"};
     margin: auto;
 
     .blog {
         @extend .clickable-card;
-        
         margin: 0.5rem;
         height: 13rem;
-        display: flex; 
+        display: flex;
         background: white;
         text-decoration: none;
         color: black;
@@ -69,7 +67,7 @@
             border-radius: 5px 0 0 5px;
             object-fit: cover;
         }
-        
+
         .blog-info {
             padding: 1rem;
             display: flex;
@@ -108,12 +106,9 @@
     font-weight: 700;
     font-family: 'Times New Roman', serif;
     width: fit-content;
-    
+
     @media screen and (max-width: $medium-screen-width) {
         margin-inline: auto;
         font-size: 1.5rem;
     }
-
 }
-
-

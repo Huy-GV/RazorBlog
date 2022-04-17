@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace RazorBlog.Models
+namespace RazorBlog.Models;
+
+public class Comment : Post
 {
-    public class Comment : Post
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        [Required, MaxLength(250)]
-        public override string Content { get; set; }
+    [Required, MaxLength(250)]
+    public override string Content { get; set; }
 
-        public int? ParentCommentId { get; set; }
-        public Comment? ParentComment { get; set; }
+    public int? ParentCommentId { get; set; }
+    public Comment? ParentComment { get; set; }
 
-        [Required]
-        public int BlogId { get; set; }
-    }
+    [Required]
+    public int BlogId { get; set; }
 }

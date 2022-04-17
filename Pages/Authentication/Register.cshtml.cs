@@ -1,26 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using RazorBlog.Models;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using RazorBlog.Services;
 using RazorBlog.Data.ViewModel;
-using RazorBlog.Interfaces;
-using RazorBlog.Services.Interfaces;
+using RazorBlog.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RazorBlog.Pages.Authentication
 {

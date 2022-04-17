@@ -1,17 +1,15 @@
-﻿using RazorBlog.Data;
-using RazorBlog.Interfaces;
-using RazorBlog.Models;
-using RazorBlog.Services;
-using RazorBlog.Services.Implementations;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
+using RazorBlog.Data;
+using RazorBlog.Models;
+using RazorBlog.Services.Implementations;
 using RazorBlog.Services.Interfaces;
+using System;
 
 namespace RazorBlog
 {

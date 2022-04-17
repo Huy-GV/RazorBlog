@@ -1,27 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using RazorBlog.Data;
-using RazorBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using RazorBlog.Services;
+using RazorBlog.Data;
 using RazorBlog.Data.ViewModel;
 using RazorBlog.Interfaces;
+using RazorBlog.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace RazorBlog.Pages.Blogs
 {
-
     [Authorize]
     public class EditModel : BasePageModel<EditModel>
     {
         [BindProperty]
         public EditBlogViewModel EditBlogVM { get; set; }
+
         private readonly IImageService _imageService;
+
         public EditModel(
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
@@ -30,6 +28,7 @@ namespace RazorBlog.Pages.Blogs
         {
             _imageService = imageFileService;
         }
+
         public async Task<IActionResult> OnGetAsync(int? blogID, string? username)
         {
             if (blogID == null || username == null)
@@ -41,9 +40,9 @@ namespace RazorBlog.Pages.Blogs
             }
 
             var blog = await DbContext.Blog.FindAsync(blogID);
-            
+
             EditBlogVM = new EditBlogViewModel
-            { 
+            {
                 Id = blog.Id,
                 Title = blog.Title,
                 Content = blog.Content,
@@ -52,6 +51,7 @@ namespace RazorBlog.Pages.Blogs
 
             return Page();
         }
+
         public async Task<IActionResult> OnPostEditBlogAsync()
         {
             if (!ModelState.IsValid)
@@ -76,14 +76,14 @@ namespace RazorBlog.Pages.Blogs
             {
                 try
                 {
-                    _imageService.DeleteImage(blog.ImagePath);
+                    _imageService.DeleteImage(blog.CoverImageUri);
                     var imageFile = EditBlogVM.CoverImage;
                     var imageName = _imageService.BuildFileName(imageFile.FileName);
-                    blog.ImagePath = imageName;
+                    blog.CoverImageUri = imageName;
 
                     await _imageService.UploadBlogImageAsync(imageFile, imageName);
-                    
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Logger.LogError("Failed to update blog image");
                     Logger.LogError(ex.Message);
@@ -96,4 +96,3 @@ namespace RazorBlog.Pages.Blogs
         }
     }
 }
-

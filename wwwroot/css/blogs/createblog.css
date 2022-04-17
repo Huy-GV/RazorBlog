@@ -26,17 +26,17 @@ label {
     background-color: var(--primary-purple);
     border: none;
     border-radius: 3px;
-    color:white;
+    color: white;
     padding: 0.8rem;
     font-size: 1.3rem;
     width: 60%;
     box-shadow: 0 3px 10px rgba(0,0,0,0.25);
 }
 
-.submit-post:hover{
-    cursor: pointer;
-    filter: brightness(0.6);
-}
+    .submit-post:hover {
+        cursor: pointer;
+        filter: brightness(0.6);
+    }
 
 .add-form {
     display: flex;

@@ -1,15 +1,21 @@
 ﻿using System;
 
-namespace RazorBlog.Models
+namespace RazorBlog.Models;
+
+public interface ISoftDeletable
 {
-    public interface ISoftDeletable
+    public bool IsDeleted { get; set; }
+    public DateTime? DeleteDate { get; set; }
+
+    public void SoftDelete()
     {
-        public bool IsDeleted { get; set; }
-        public DateTime DeleteDate { get; set; }
-        public void Delete()
-        {
-            IsDeleted = true;
-            DeleteDate = DateTime.Now;
-        }
+        IsDeleted = true;
+        DeleteDate = DateTime.Now;
+    }
+
+    public void Recover()
+    {
+        IsDeleted = false;
+        DeleteDate = null;
     }
 }

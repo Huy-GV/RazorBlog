@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using RazorBlog.Models;
 
 namespace RazorBlog.Data
@@ -26,7 +23,7 @@ namespace RazorBlog.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ApplicationUser>()
-                .HasQueryFilter(u => !u.IsDeleted);
+                .HasQueryFilter(u => !u.IsDeleted && u.DeleteDate == null);
 
             #region BanTicket
 
@@ -42,9 +39,6 @@ namespace RazorBlog.Data
                 .HasForeignKey(b => b.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<BanTicket>()
-                .HasQueryFilter(cm => !cm.IsDeleted);
 
             modelBuilder.Entity<BanTicket>()
                 .HasKey(b => new { b.UserId, b.ModeratorId });

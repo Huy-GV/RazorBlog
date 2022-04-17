@@ -1,16 +1,13 @@
- using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using RazorBlog.Data;
-using RazorBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging; 
-using RazorBlog.Services;
+using Microsoft.Extensions.Logging;
+using RazorBlog.Data;
 using RazorBlog.Data.ViewModel;
 using RazorBlog.Interfaces;
+using RazorBlog.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace RazorBlog.Pages.Blogs
 {
@@ -19,7 +16,9 @@ namespace RazorBlog.Pages.Blogs
     {
         [BindProperty]
         public CreateBlogViewModel CreateBlogVM { get; set; }
+
         private readonly IImageService _imageService;
+
         public CreateModel(
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
@@ -29,6 +28,7 @@ namespace RazorBlog.Pages.Blogs
         {
             _imageService = imageService;
         }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await UserManager.GetUserAsync(User);
@@ -36,6 +36,7 @@ namespace RazorBlog.Pages.Blogs
 
             return Page();
         }
+
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await UserManager.GetUserAsync(User);
@@ -54,25 +55,23 @@ namespace RazorBlog.Pages.Blogs
                 await _imageService.UploadBlogImageAsync(coverImage, imageName);
                 var entry = DbContext.Blog.Add(new Blog()
                 {
-                    ImagePath = imageName,
+                    CoverImageUri = imageName,
                     Date = DateTime.Now,
                     AppUserId = user.Id
                 });
 
                 entry.CurrentValues.SetValues(CreateBlogVM);
                 await DbContext.SaveChangesAsync();
-                
+
                 return RedirectToPage("./Index");
-            } 
+            }
             catch (Exception ex)
             {
                 Logger.LogError("Failed to create blog");
                 Logger.LogError(ex.Message);
-                
+
                 return Page();
             }
         }
     }
-
 }
-

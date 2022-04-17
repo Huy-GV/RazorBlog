@@ -19,6 +19,6 @@ public class Topic : IEntity, ISoftDeletable
     public string Description { get; set; }
 
     public bool IsDeleted { get; set; } = false;
-    public DateTime DeleteDate { get; set; } = DateTime.Now;
+    public DateTime? DeleteDate { get; set; } = null;
     public ApplicationUser Creator { get; set; }
 }

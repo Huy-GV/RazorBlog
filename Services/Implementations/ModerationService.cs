@@ -1,9 +1,9 @@
 ﻿namespace RazorBlog.Services.Implementations
 {
+    using Microsoft.AspNetCore.Identity;
     using RazorBlog.Models;
     using RazorBlog.Services.Communications;
     using RazorBlog.Services.Interfaces;
-    using Microsoft.AspNetCore.Identity;
     using System;
     using System.Threading.Tasks;
 

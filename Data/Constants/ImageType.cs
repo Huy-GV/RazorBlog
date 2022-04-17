@@ -2,7 +2,7 @@
 {
     public enum ImageType
     {
-        BlogCover, 
-        ProfilePicture 
+        BlogCover,
+        ProfilePicture
     }
 }

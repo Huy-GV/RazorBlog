@@ -9,7 +9,6 @@ blogContainer.addEventListener('click', (e) => {
         editForm.classList.toggle("hidden-element");
         blogContent.classList.toggle("hidden-element");
     }
-
 })
 
 const commentContainer = document.querySelector(".comment-container");
@@ -31,6 +30,5 @@ commentContainer.addEventListener('click', (e) => {
 
         let deleteCommentBtn = comment.querySelector(".delete-comment");
         deleteCommentBtn.classList.toggle("hidden-element");
-
     }
 })
