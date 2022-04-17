@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using RazorBlog.Services.Interfaces;
 
 namespace RazorBlog
 {
@@ -70,6 +71,8 @@ namespace RazorBlog
 
             //transient because service is stateless and lightweight
             //services.AddTransient<IImageService, ImageService>();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

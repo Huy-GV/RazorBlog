@@ -4,8 +4,9 @@
     {
         Success,
         InvalidArgument,
+        UnauthorizedAction,
         AuthenticationFailure,
         NotFound,
-        UnknownError
+        InternalError
     }
 }

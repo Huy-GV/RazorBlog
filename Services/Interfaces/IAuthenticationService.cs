@@ -9,8 +9,6 @@
         // signin, sign out, register, deactivate
         Task<Result> SignIn(SignInViewModel viewModel);
 
-        Task<Result> SignOut();
-
         Task<Result> Register(RegisterViewModel viewModel);
 
         Task<Result> ChangePassword(string password);

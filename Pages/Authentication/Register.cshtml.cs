@@ -20,27 +20,20 @@ using Microsoft.AspNetCore.Hosting;
 using RazorBlog.Services;
 using RazorBlog.Data.ViewModel;
 using RazorBlog.Interfaces;
+using RazorBlog.Services.Interfaces;
 
 namespace RazorBlog.Pages.Authentication
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ILogger<RegisterModel> _logger;
-        private readonly IImageService _imageService;
+        private readonly Services.Interfaces.IAuthenticationService _authenticationService;
 
         public RegisterModel(
-            UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IImageService imageService)
+            Services.Interfaces.IAuthenticationService authenticationService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
-            _imageService = imageService;
+            _authenticationService = authenticationService;
         }
 
         [BindProperty]
@@ -58,50 +51,16 @@ namespace RazorBlog.Pages.Authentication
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            string profilePath = "default";
             if (ModelState.IsValid)
             {
-                if (CreateUserViewModel.ProfilePicture != null)
-                {
-                    profilePath = await GetProfilePicturePath(CreateUserViewModel);
-                }
-
-                var user = new ApplicationUser
-                {
-                    UserName = CreateUserViewModel.UserName,
-                    EmailConfirmed = true,
-                    RegistrationDate = DateTime.Now,
-                    ProfilePicturePath = profilePath,
-                    Country = CreateUserViewModel.Country
-                };
-
-                var result = await _userManager.CreateAsync(user, CreateUserViewModel.Password);
+                var result = await _authenticationService.Register(CreateUserViewModel);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-
                     return LocalRedirect(returnUrl);
                 }
             }
 
             return Page();
-        }
-
-        private async Task<string> GetProfilePicturePath(RegisterViewModel createUser)
-        {
-            try
-            {
-                var imageFile = createUser.ProfilePicture;
-                var fileName = _imageService.BuildFileName(imageFile.FileName);
-                await _imageService.UploadProfileImageAsync(imageFile, fileName);
-                return fileName;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to upload new profile picture: {ex}");
-                return "default.jpg";
-            }
         }
     }
 }

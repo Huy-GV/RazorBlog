@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -13,22 +12,22 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using RazorBlog.Models;
 using RazorBlog.Data.ViewModel;
+using RazorBlog.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 
 namespace RazorBlog.Pages.Authentication
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly Services.Interfaces.IAuthenticationService _authenticationService;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager)
+            Services.Interfaces.IAuthenticationService authenticationService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _authenticationService = authenticationService;
             _logger = logger;
         }
 
@@ -60,29 +59,14 @@ namespace RazorBlog.Pages.Authentication
 
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(
-                    LogInViewModel.UserName,
-                    LogInViewModel.Password,
-                    LogInViewModel.RememberMe,
-                    lockoutOnFailure: false);
-
+                var result = await _authenticationService.SignIn(LogInViewModel);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return Page();
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+
+                ModelState.AddModelError("AuthError", result.ErrorMessage);
+                return Page();
             }
 
             // If we got this far, something failed, redisplay form
