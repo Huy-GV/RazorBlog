@@ -1,6 +1,6 @@
-using BlogApp.Data;
-using BlogApp.Data.DTOs;
-using BlogApp.Models;
+using RazorBlog.Data;
+using RazorBlog.Data.DTOs;
+using RazorBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +14,11 @@ using Microsoft.AspNetCore.Hosting;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.Extensions.Logging;
-using BlogApp.Services;
-using BlogApp.Data.ViewModel;
-using BlogApp.Interfaces;
+using RazorBlog.Services;
+using RazorBlog.Data.ViewModel;
+using RazorBlog.Interfaces;
 
-namespace BlogApp.Pages.User
+namespace RazorBlog.Pages.User
 {
     [Authorize]
     public class EditModel : BasePageModel<EditModel>

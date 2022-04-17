@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace BlogApp.Data.Migrations
+namespace RazorBlog.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

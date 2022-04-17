@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 //TODO: merge create/ edit blog viewmodels an create/ edit comment viewmodel
 
-namespace BlogApp.Data.ViewModel
+namespace RazorBlog.Data.ViewModel
 {
     [Obsolete]
     public class EditCommentViewModel

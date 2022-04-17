@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using BlogApp.Models;
+using RazorBlog.Models;
 
-namespace BlogApp.Data.DTOs
+namespace RazorBlog.Data.DTOs
 {
     public class DetailedBlogDto
     {

@@ -1,9 +1,9 @@
-﻿using BlogApp.Data.DTOs;
-using BlogApp.Services.Communications;
+﻿using RazorBlog.Data.DTOs;
+using RazorBlog.Services.Communications;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BlogApp.Services.Interfaces
+namespace RazorBlog.Services.Interfaces
 {
     public interface IBlogService
     {

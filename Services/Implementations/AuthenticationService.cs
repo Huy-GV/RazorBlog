@@ -1,9 +1,9 @@
-﻿namespace BlogApp.Services.Implementations
+﻿namespace RazorBlog.Services.Implementations
 {
-    using BlogApp.Data.ViewModel;
-    using BlogApp.Models;
-    using BlogApp.Services.Communications;
-    using BlogApp.Services.Interfaces;
+    using RazorBlog.Data.ViewModel;
+    using RazorBlog.Models;
+    using RazorBlog.Services.Communications;
+    using RazorBlog.Services.Interfaces;
     using Microsoft.AspNetCore.Identity;
     using System.Threading.Tasks;
 

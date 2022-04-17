@@ -1,4 +1,4 @@
-﻿namespace BlogApp.Data.DTOs
+﻿namespace RazorBlog.Data.DTOs
 {
     public class BaseProfileDto
     {

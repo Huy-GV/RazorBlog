@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlogApp.Models
+namespace RazorBlog.Models
 {
     public interface ISoftDeletable
     {

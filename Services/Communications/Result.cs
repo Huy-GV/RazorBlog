@@ -1,4 +1,4 @@
-﻿namespace BlogApp.Services.Communications
+﻿namespace RazorBlog.Services.Communications
 {
     public record Result
     {

@@ -1,4 +1,4 @@
-﻿namespace BlogApp.Data.ViewModels
+﻿namespace RazorBlog.Data.ViewModels
 {
     public class CommentViewModel : PostViewModel
     {

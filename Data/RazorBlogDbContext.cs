@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using BlogApp.Models;
+using RazorBlog.Models;
 
-namespace BlogApp.Data
+namespace RazorBlog.Data
 {
     public class RazorBlogDbContext : IdentityDbContext<ApplicationUser>
     {

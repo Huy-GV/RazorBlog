@@ -1,8 +1,8 @@
-﻿using BlogApp.Services.Communications;
+﻿using RazorBlog.Services.Communications;
 using System;
 using System.Threading.Tasks;
 
-namespace BlogApp.Services.Interfaces
+namespace RazorBlog.Services.Interfaces
 {
     public interface IModerationService
     {

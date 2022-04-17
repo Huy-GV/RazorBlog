@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BlogApp": {
+    "RazorBlog": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

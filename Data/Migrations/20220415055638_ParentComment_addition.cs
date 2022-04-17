@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace BlogApp.Data.Migrations
+namespace RazorBlog.Data.Migrations
 {
     public partial class ParentComment_addition : Migration
     {

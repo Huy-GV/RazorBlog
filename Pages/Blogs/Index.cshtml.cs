@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using BlogApp.Data;
-using BlogApp.Models;
+using RazorBlog.Data;
+using RazorBlog.Models;
 using Microsoft.AspNetCore.Identity;
-using BlogApp.Pages;
+using RazorBlog.Pages;
 using Microsoft.Extensions.Logging;
 
-namespace BlogApp.Pages.Blogs
+namespace RazorBlog.Pages.Blogs
 {
     [AllowAnonymous]
     public class IndexModel : BasePageModel<IndexModel>

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http; 
 
-namespace BlogApp.Data.ViewModel
+namespace RazorBlog.Data.ViewModel
 {
     public class RegisterViewModel
     {

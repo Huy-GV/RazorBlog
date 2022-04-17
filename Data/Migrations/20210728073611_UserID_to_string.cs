@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BlogApp.Data.Migrations
+namespace RazorBlog.Data.Migrations
 {
     public partial class UserID_to_string : Migration
     {

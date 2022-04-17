@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using BlogApp.Data;
+using RazorBlog.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlogApp
+namespace RazorBlog
 {
     public class Program
     {

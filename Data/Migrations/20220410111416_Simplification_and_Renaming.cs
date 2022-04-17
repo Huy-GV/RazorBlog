@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BlogApp.Data.Migrations
+namespace RazorBlog.Data.Migrations
 {
     public partial class Simplification_and_Renaming : Migration
     {

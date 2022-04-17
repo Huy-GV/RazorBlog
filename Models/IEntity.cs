@@ -1,4 +1,4 @@
-﻿namespace BlogApp.Models
+﻿namespace RazorBlog.Models
 {
     public interface IEntity
     {

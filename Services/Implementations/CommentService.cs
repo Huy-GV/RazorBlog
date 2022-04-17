@@ -1,9 +1,9 @@
-﻿namespace BlogApp.Services.Implementations
+﻿namespace RazorBlog.Services.Implementations
 {
-    using BlogApp.Data.DTOs;
-    using BlogApp.Data.ViewModel;
-    using BlogApp.Services.Communications;
-    using BlogApp.Services.Interfaces;
+    using RazorBlog.Data.DTOs;
+    using RazorBlog.Data.ViewModel;
+    using RazorBlog.Services.Communications;
+    using RazorBlog.Services.Interfaces;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

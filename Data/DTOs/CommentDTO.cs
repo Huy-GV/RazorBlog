@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlogApp.Data.DTOs
+namespace RazorBlog.Data.DTOs
 {
     public class CommentDto
     {

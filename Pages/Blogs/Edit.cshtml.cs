@@ -2,18 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BlogApp.Data;
-using BlogApp.Models;
+using RazorBlog.Data;
+using RazorBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using BlogApp.Services;
-using BlogApp.Data.ViewModel;
-using BlogApp.Interfaces;
+using RazorBlog.Services;
+using RazorBlog.Data.ViewModel;
+using RazorBlog.Interfaces;
 
-namespace BlogApp.Pages.Blogs
+namespace RazorBlog.Pages.Blogs
 {
 
     [Authorize]

@@ -1,7 +1,7 @@
-﻿namespace BlogApp.Services.Interfaces
+﻿namespace RazorBlog.Services.Interfaces
 {
-    using BlogApp.Data.ViewModel;
-    using BlogApp.Services.Communications;
+    using RazorBlog.Data.ViewModel;
+    using RazorBlog.Services.Communications;
     using System.Threading.Tasks;
 
     public interface IAuthenticationService

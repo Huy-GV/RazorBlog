@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using BlogApp.Models;
-using BlogApp.Data.ViewModel;
+using RazorBlog.Models;
+using RazorBlog.Data.ViewModel;
 
-namespace BlogApp.Pages.Authentication
+namespace RazorBlog.Pages.Authentication
 {
     [AllowAnonymous]
     public class LoginModel : PageModel

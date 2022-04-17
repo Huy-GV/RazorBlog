@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BlogApp.Models;
+namespace RazorBlog.Models;
 
 [Table(nameof(Topic))]
 public class Topic : IEntity, ISoftDeletable

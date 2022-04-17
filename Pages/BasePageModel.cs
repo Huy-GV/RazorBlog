@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using BlogApp.Data;
+using RazorBlog.Data;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using BlogApp.Models;
+using RazorBlog.Models;
 using Microsoft.Extensions.Logging;
 
-namespace BlogApp.Pages
+namespace RazorBlog.Pages
 {
     public class BasePageModel<TPageModel> : PageModel where TPageModel : PageModel
     {

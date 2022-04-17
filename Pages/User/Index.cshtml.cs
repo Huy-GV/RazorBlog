@@ -1,6 +1,6 @@
-using BlogApp.Data;
-using BlogApp.Data.DTOs;
-using BlogApp.Models;
+using RazorBlog.Data;
+using RazorBlog.Data.DTOs;
+using RazorBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace BlogApp.Pages.User
+namespace RazorBlog.Pages.User
 {
     [Authorize]
     public class IndexModel : BasePageModel<IndexModel>

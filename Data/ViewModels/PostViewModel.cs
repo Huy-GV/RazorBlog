@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlogApp.Data.ViewModels
+namespace RazorBlog.Data.ViewModels
 {
     public class PostViewModel
     {

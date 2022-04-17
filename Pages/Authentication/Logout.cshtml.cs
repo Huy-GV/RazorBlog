@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using BlogApp.Models;
+using RazorBlog.Models;
 
-namespace BlogApp.Pages.Authentication
+namespace RazorBlog.Pages.Authentication
 {
     [AllowAnonymous]
     public class LogoutModel : PageModel

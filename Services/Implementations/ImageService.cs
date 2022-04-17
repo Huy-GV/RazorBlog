@@ -1,6 +1,6 @@
-﻿namespace BlogApp.Services.Implementations
+﻿namespace RazorBlog.Services.Implementations
 {
-    using BlogApp.Interfaces;
+    using RazorBlog.Interfaces;
     using Microsoft.AspNetCore.Http;
     using System.Threading.Tasks;
 

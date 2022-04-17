@@ -4,8 +4,8 @@ using System;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Threading.Tasks;
-using BlogApp.Interfaces;
-namespace BlogApp.Services
+using RazorBlog.Interfaces;
+namespace RazorBlog.Services
 {
     public class ImageService : IImageService
     {

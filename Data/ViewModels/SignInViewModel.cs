@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
  
 
 
-namespace BlogApp.Data.ViewModel{
+namespace RazorBlog.Data.ViewModel{
     public class SignInViewModel
     {
         [Required]

@@ -13,15 +13,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using BlogApp.Models;
+using RazorBlog.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-using BlogApp.Services;
-using BlogApp.Data.ViewModel;
-using BlogApp.Interfaces;
+using RazorBlog.Services;
+using RazorBlog.Data.ViewModel;
+using RazorBlog.Interfaces;
 
-namespace BlogApp.Pages.Authentication
+namespace RazorBlog.Pages.Authentication
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel

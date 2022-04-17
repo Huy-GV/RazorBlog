@@ -1,7 +1,7 @@
-﻿namespace BlogApp.Services.Implementations
+﻿namespace RazorBlog.Services.Implementations
 {
-    using BlogApp.Services.Communications;
-    using BlogApp.Services.Interfaces;
+    using RazorBlog.Services.Communications;
+    using RazorBlog.Services.Interfaces;
     using System.Threading.Tasks;
 
     public class UserAccountService : IUserAccountService

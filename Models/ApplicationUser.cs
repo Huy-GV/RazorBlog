@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 
-namespace BlogApp.Models
+namespace RazorBlog.Models
 {
     public class ApplicationUser : IdentityUser, IEntity, ISoftDeletable
     {

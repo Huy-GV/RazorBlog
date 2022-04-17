@@ -2,17 +2,17 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BlogApp.Models;
+using RazorBlog.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using BlogApp.Data;
-using BlogApp.Data.DTOs;
-using BlogApp.Data.Constants;
-using BlogApp.Data.ViewModel;
-using BlogApp.Services;
+using RazorBlog.Data;
+using RazorBlog.Data.DTOs;
+using RazorBlog.Data.Constants;
+using RazorBlog.Data.ViewModel;
+using RazorBlog.Services;
 
-namespace BlogApp.Pages.Blogs
+namespace RazorBlog.Pages.Blogs
 {
     [AllowAnonymous]
     public class ReadModel : BasePageModel<ReadModel>

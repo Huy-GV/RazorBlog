@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlogApp.Data.ViewModels
+namespace RazorBlog.Data.ViewModels
 {
     public class BlogViewModel : PostViewModel
     {

@@ -1,4 +1,4 @@
-﻿namespace BlogApp.Data.Constants
+﻿namespace RazorBlog.Data.Constants
 {
     public class Roles
     {

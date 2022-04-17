@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlogApp.Models
+namespace RazorBlog.Models
 {
     public class BanTicket : IEntity, ISoftDeletable
     {

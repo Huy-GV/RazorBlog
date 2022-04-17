@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BlogApp.Models;
+using RazorBlog.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using BlogApp.Data.Constants;
+using RazorBlog.Data.Constants;
 
-namespace BlogApp.Data
+namespace RazorBlog.Data
 {
     public class SeedData
     {

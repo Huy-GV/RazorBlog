@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace BlogApp.Interfaces
+namespace RazorBlog.Interfaces
 {
     [Obsolete]
     public interface IImageService

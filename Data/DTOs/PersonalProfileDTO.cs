@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlogApp.Models;
+using RazorBlog.Models;
 using System.Threading.Tasks;
 
-namespace BlogApp.Data.DTOs
+namespace RazorBlog.Data.DTOs
 {
     public class PersonalProfileDto : BaseProfileDto
     {
