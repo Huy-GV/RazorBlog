@@ -25,11 +25,11 @@ namespace RazorBlog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .AddDbContext<RazorBlogDbContext>(options =>
-                {
-                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                });
+            services.AddDbContext<RazorBlogDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
             services.AddDatabaseDeveloperPageExceptionFilter();
             services
                 .AddIdentity<ApplicationUser, IdentityRole>()
@@ -57,8 +57,6 @@ namespace RazorBlog
             });
 
             services.AddAuthorization();
-
-            //TODO: configure cookie options
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
@@ -67,10 +65,9 @@ namespace RazorBlog
                 options.LogoutPath = "/Authentication/Logout";
             });
 
-            //transient because service is stateless and lightweight
-            //services.AddTransient<IImageService, ImageService>();
-
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IBlogService, BlogService>();
+            services.AddScoped<IImageService, ImageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

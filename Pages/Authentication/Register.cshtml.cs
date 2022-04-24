@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using RazorBlog.Data.ViewModel;
+using RazorBlog.Data.ViewModels;
 using RazorBlog.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;

@@ -62,7 +62,7 @@
                 blogContentClass = "suspended-post";
             }
         }
-        <p class="blog-description">@Model.Blog.Description</p>
+        <p class="blog-description">@Model.Blog.Introduction</p>
         <img src="/images/blogs/@Model.Blog.CoverImageUri">
         <p class="blog-content @blogContentClass">@Model.DetailedBlogDto.Content</p>
 

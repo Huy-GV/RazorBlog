@@ -11,14 +11,14 @@ namespace RazorBlog.Services.Interfaces
         /// </summary>
         /// <param name="imageFile"></param>
         /// <returns>The name of the uploaded image.</returns>
-        Task<string> UploadBlogCoverImageAsync(IFormFile imageFile, string userName, int blogId);
+        Task<string> UploadBlogCoverImageAsync(IFormFile imageFile);
 
         /// <summary>
         /// Upload the profile image of a user.
         /// </summary>
         /// <param name="imageFile"></param>
         /// <returns>The name of the uploaded image.</returns>
-        Task<string> UploadProfileImageAsync(IFormFile imageFile, string userName);
+        Task<string> UploadProfileImageAsync(IFormFile imageFile);
 
         /// <summary>
         /// Called when user wants to revert their profile image to default or upload a new profile/ blog cover image

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using RazorBlog.Data;
 using RazorBlog.Data.Constants;
 using RazorBlog.Data.DTOs;
-using RazorBlog.Data.ViewModel;
+using RazorBlog.Data.ViewModels;
 using RazorBlog.Models;
 using System;
 using System.Threading.Tasks;

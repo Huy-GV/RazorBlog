@@ -12,7 +12,7 @@ namespace RazorBlog.Data.DTOs
         public int BlogCount { get; set; }
         public int BlogCountCurrentYear { get; set; }
         public int CommentCount { get; set; }
-        public int ViewCountCurrentYear { get; set; } = 0;
+        public uint ViewCountCurrentYear { get; set; } = 0;
         public List<Blog> Blogs { get; set; } = new List<Blog>();
     }
 }

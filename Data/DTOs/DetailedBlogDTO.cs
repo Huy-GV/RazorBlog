@@ -44,7 +44,7 @@ namespace RazorBlog.Data.DTOs
                 AuthorName = blog.Author,
                 AuthorDescription = description,
                 AuthorProfilePicture = blog.AppUser.ProfileImageUri,
-                Description = blog.Description,
+                Description = blog.Introduction,
                 IsHidden = blog.IsHidden,
                 Date = blog.Date,
                 CommentDtos = commentDtos

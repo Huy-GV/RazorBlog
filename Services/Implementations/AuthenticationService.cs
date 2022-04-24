@@ -4,7 +4,7 @@
     using Microsoft.Extensions.Logging;
     using RazorBlog.Data;
     using RazorBlog.Data.Mappers;
-    using RazorBlog.Data.ViewModel;
+    using RazorBlog.Data.ViewModels;
     using RazorBlog.Models;
     using RazorBlog.Services.Communications;
     using RazorBlog.Services.Interfaces;
@@ -103,6 +103,16 @@
             }
 
             return AuthenticationResultMapper.Error(ServiceCode.InternalError);
+        }
+
+        public async Task<bool> UserExists(string? userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return false;
+            }
+
+            return await _userManager.FindByIdAsync(userId) != null;
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace RazorBlog.Data.ViewModel
+namespace RazorBlog.Data.ViewModels
 {
     [Obsolete]
     public class CreateCommentViewModel : EditCommentViewModel

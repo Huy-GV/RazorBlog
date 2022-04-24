@@ -14,8 +14,8 @@ namespace RazorBlog.Data
         public DbSet<Blog> Blog { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<BanTicket> BanTicket { get; set; }
-        public DbSet<Topic> Community { get; set; }
-        public DbSet<ModeratorAssignment> CommunityModeration { get; set; }
+        public DbSet<Topic> Topic { get; set; }
+        public DbSet<ModeratorAssignment> ModeratorAssignment { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -52,6 +52,10 @@ namespace RazorBlog.Data
                 .WithMany()
                 .HasForeignKey(c => c.CreatorUserId)
                 .IsRequired();
+
+            modelBuilder.Entity<Topic>()
+                .HasIndex(t => t.Name)
+                .IsUnique();
 
             modelBuilder.Entity<Topic>()
                 .HasQueryFilter(cm => !cm.IsDeleted);

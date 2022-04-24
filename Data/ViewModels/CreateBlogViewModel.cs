@@ -3,7 +3,7 @@ using RazorBlog.Data.ValidationAttributes;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace RazorBlog.Data.ViewModel
+namespace RazorBlog.Data.ViewModels
 {
     [Obsolete]
     public class CreateBlogViewModel
@@ -22,7 +22,7 @@ namespace RazorBlog.Data.ViewModel
 
         [Display(Name = "Cover image")]
         [Required]
-        [FileTypeAttribute(".jpg", ".jpeg", ".png", ErrorMessage = "Only jpg/jpeg and png files are allowed")]
+        [FileType(".jpg", ".jpeg", ".png", ErrorMessage = "Only jpg/jpeg and png files are allowed")]
         public IFormFile CoverImage { get; set; }
     }
 }

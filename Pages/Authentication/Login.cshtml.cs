@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using RazorBlog.Data.ViewModel;
+using RazorBlog.Data.ViewModels;
 using RazorBlog.Models;
 using System;
 using System.Threading.Tasks;
@@ -35,18 +35,13 @@ namespace RazorBlog.Pages.Authentication
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if (!string.IsNullOrEmpty(ErrorMessage))
-            {
-                ModelState.AddModelError(string.Empty, ErrorMessage);
-            }
-
             returnUrl ??= Url.Content("~/");
             await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
 
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             Console.WriteLine("Return URL from log in model: " + returnUrl);

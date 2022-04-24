@@ -13,7 +13,7 @@ namespace RazorBlog.Data.ValidationAttributes
         {
             if (value is IFormFile file)
             {
-                return allowedFileTypes.Contains(Path.GetExtension(file.FileName));
+                return allowedFileTypes.Contains(Path.GetExtension(file.FileName).TrimStart('.'));
             }
 
             return false;
@@ -22,7 +22,7 @@ namespace RazorBlog.Data.ValidationAttributes
         public FileTypeAttribute(params string[] allowedTypes)
         {
             if (allowedTypes
-                .Select(x => string.IsNullOrWhiteSpace(x) || x == string.Empty)
+                .Where(x => string.IsNullOrWhiteSpace(x) || x == string.Empty)
                 .Any())
             {
                 throw new System.ArgumentException("File types must not be null or empty");

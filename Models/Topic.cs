@@ -8,6 +8,8 @@ namespace RazorBlog.Models;
 public class Topic : IEntity, ISoftDeletable
 {
     public int Id { get; set; }
+
+    [StringLength(20)]
     public string Name { get; set; }
 
     [DataType(DataType.Date)]

@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RazorBlog.Data;
-using RazorBlog.Data.ViewModel;
-using RazorBlog.Interfaces;
+using RazorBlog.Data.ViewModels;
+using RazorBlog.Services.Interfaces;
 using RazorBlog.Models;
 using System;
 using System.Threading.Tasks;
@@ -14,34 +14,36 @@ namespace RazorBlog.Pages.Blogs
     [Authorize]
     public class CreateModel : BasePageModel<CreateModel>
     {
-        [BindProperty]
-        public CreateBlogViewModel CreateBlogVM { get; set; }
+        private readonly IBlogService _blogService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        private readonly IImageService _imageService;
+        [BindProperty]
+        public BlogViewModel CreateBlogViewModel { get; set; }
 
         public CreateModel(
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
             ILogger<CreateModel> logger,
-            IImageService imageService) : base(
+            IBlogService blogService) : base(
                 context, userManager, logger)
         {
-            _imageService = imageService;
+            _blogService = blogService;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var user = await UserManager.GetUserAsync(User);
-            var username = user.UserName;
+            if (User.Identity?.IsAuthenticated.Equals(false) ?? true)
+            {
+                return Challenge();
+            }
 
             return Page();
         }
 
+        // todo: make topic a select/ radio group
         public async Task<IActionResult> OnPostAsync()
         {
-            var user = await UserManager.GetUserAsync(User);
-            var username = user.UserName;
-
             if (!ModelState.IsValid)
             {
                 Logger.LogError("Invalid model state when submitting new post");
@@ -50,19 +52,10 @@ namespace RazorBlog.Pages.Blogs
 
             try
             {
-                var coverImage = CreateBlogVM.CoverImage;
-                var imageName = _imageService.BuildFileName(coverImage.FileName);
-                await _imageService.UploadBlogImageAsync(coverImage, imageName);
-                var entry = DbContext.Blog.Add(new Blog()
-                {
-                    CoverImageUri = imageName,
-                    Date = DateTime.Now,
-                    AppUserId = user.Id
-                });
+                var userId = _userManager.GetUserId(User);
+                var result = await _blogService.CreateBlogAsync(CreateBlogViewModel, userId);
 
-                entry.CurrentValues.SetValues(CreateBlogVM);
-                await DbContext.SaveChangesAsync();
-
+                // todo: return to the newly created page?
                 return RedirectToPage("./Index");
             }
             catch (Exception ex)

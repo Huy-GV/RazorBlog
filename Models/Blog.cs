@@ -11,8 +11,8 @@ public class Blog : Post, ISoftDeletable
     [Required]
     public string Title { get; set; }
 
-    public string Description { get; set; }
-    public int ViewCount { get; set; } = 0;
+    public string Introduction { get; set; }
+    public uint ViewCount { get; set; } = 0;
 
     [Required]
     public string CoverImageUri { get; set; }

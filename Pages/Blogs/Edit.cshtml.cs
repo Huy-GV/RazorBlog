@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RazorBlog.Data;
-using RazorBlog.Data.ViewModel;
+using RazorBlog.Data.ViewModels;
 using RazorBlog.Interfaces;
 using RazorBlog.Models;
 using System;
@@ -46,7 +46,7 @@ namespace RazorBlog.Pages.Blogs
                 Id = blog.Id,
                 Title = blog.Title,
                 Content = blog.Content,
-                Description = blog.Description
+                Description = blog.Introduction
             };
 
             return Page();

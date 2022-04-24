@@ -13,6 +13,8 @@ namespace RazorBlog
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
+
+            // todo: revoke exe access on media folder
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;

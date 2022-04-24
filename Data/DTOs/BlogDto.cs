@@ -6,7 +6,10 @@
         public string Title { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public string AuthorName { get; set; }
-        public uint CommentCount { get; set; }
+        public uint ViewCount { get; set; }
         public string TopicName { get; set; }
+        public string Introduction { get; set; }
+        public System.DateTime Date { get; set; }
+        public string CoverImageUri { get; set; }
     }
 }

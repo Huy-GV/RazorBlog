@@ -4,7 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using RazorBlog.Data.Constants;
 using RazorBlog.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace RazorBlog.Data
 {
@@ -12,55 +14,99 @@ namespace RazorBlog.Data
     {
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = new RazorBlogDbContext(serviceProvider.GetRequiredService<DbContextOptions<RazorBlogDbContext>>())) ;
-            var adminID = await EnsureAdmin(serviceProvider, "admin");
-            await AssignAdminRole(adminID, Roles.AdminRole, serviceProvider);
-            await CreateModeratorRole(serviceProvider);
+            using var context = new RazorBlogDbContext(serviceProvider.GetRequiredService<DbContextOptions<RazorBlogDbContext>>());
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            await EnsureRole(Roles.AdminRole, roleManager);
+            await EnsureRole(Roles.ModeratorRole, roleManager);
+            await EnsureAdminUser(userManager);
+            await EnsureDefaultTopics(
+                userManager.GetUsersInRoleAsync(Roles.AdminRole).Result.Single().Id,
+                context);
         }
 
-        private static async Task<string> EnsureAdmin(IServiceProvider serviceProvider, string username)
+        private static async Task EnsureDefaultTopics(string adminId, RazorBlogDbContext context)
         {
-            var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-            var user = await userManager.FindByNameAsync(username);
-
-            if (user == null)
-            {
-                user = new ApplicationUser
+            var seededTopicNames = new string[]
                 {
-                    UserName = username,
-                    EmailConfirmed = true,
-                    ProfileImageUri = "default.jpg",
-                    Description = "Lorem ipsum dolor sed temda met sedim ips dolor sed temda met sedim ips dolor sed temda met sedim ips"
+                    "Technology", "Entertainment", "Health", "Education"
                 };
-                await userManager.CreateAsync(user, "Admin123@@");
+            var topics = await context.Topic.Where(t => seededTopicNames.Contains(t.Name)).ToListAsync();
+
+            if (topics.Count != 4)
+            {
+                context.Topic.RemoveRange(topics);
+                await context.SaveChangesAsync();
+                context.AddRange(new List<Topic>
+            {
+                 new Topic
+                 {
+                    CreationDate = DateTime.Now,
+                    CreatorUserId = adminId,
+                    Name = "Technology",
+                    Description = "Lorem ipsum sed di em dema bent unari",
+                 },
+                 new Topic
+                 {
+                    CreationDate = DateTime.Now,
+                    CreatorUserId = adminId,
+                    Name = "Entertainment",
+                    Description = "Lorem ipsum sed di em dema bent unari",
+                 },
+                 new Topic
+                 {
+                    CreationDate = DateTime.Now,
+                    CreatorUserId = adminId,
+                    Name = "Health",
+                    Description = "Lorem ipsum sed di em dema bent unari",
+                 },
+                 new Topic
+                 {
+                    CreationDate = DateTime.Now,
+                    CreatorUserId = adminId,
+                    Name = "Education",
+                    Description = "Lorem ipsum sed di em dema bent unari",
+                 },
+            });
             }
 
-            return user.Id;
+            await context.SaveChangesAsync();
         }
 
-        private static async Task AssignAdminRole(
-            string userID,
-            string role,
-            IServiceProvider serviceProvider)
+        private static async Task EnsureAdminUser(UserManager<ApplicationUser> userManager)
         {
-            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-            if (!await roleManager.RoleExistsAsync(role))
-                await roleManager.CreateAsync(new IdentityRole(role));
+            var (userName, password) = ("admin", "Admin123@@");
+            var user = await userManager.FindByNameAsync(userName);
 
-            var user = await userManager.FindByIdAsync(userID);
-            if (user == null)
-                throw new Exception("User was not found");
+            if (user != null)
+            {
+                if (!await userManager.IsInRoleAsync(user, Roles.AdminRole))
+                {
+                    await userManager.AddToRoleAsync(user, Roles.AdminRole);
+                }
 
-            if (!(await userManager.GetRolesAsync(user)).Contains(Roles.AdminRole))
-                await userManager.AddToRoleAsync(user, role);
+                return;
+            }
+
+            user = new ApplicationUser
+            {
+                UserName = userName,
+                EmailConfirmed = true,
+                ProfileImageUri = "default.jpg",
+                Description = "Lorem ipsum dolor sed temda met sedim ips dolor sed temda met sedim ips dolor sed temda met sedim ips"
+            };
+
+            await userManager.CreateAsync(user, password);
+            await userManager.AddToRoleAsync(user, Roles.AdminRole);
         }
 
-        private static async Task CreateModeratorRole(IServiceProvider serviceProvider)
+        private static async Task EnsureRole(string roleName, RoleManager<IdentityRole> roleManager)
         {
-            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
-            if (!await roleManager.RoleExistsAsync(Roles.ModeratorRole))
-                await roleManager.CreateAsync(new IdentityRole(Roles.ModeratorRole));
+            if (!await roleManager.RoleExistsAsync(roleName))
+            {
+                await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
         }
     }
 }

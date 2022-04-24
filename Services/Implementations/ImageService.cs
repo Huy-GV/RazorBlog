@@ -54,21 +54,21 @@ public class ImageService : IImageService
         }
     }
 
-    public async Task<string> UploadBlogCoverImageAsync(IFormFile imageFile, string userName, int blogId)
+    public async Task<string> UploadBlogCoverImageAsync(IFormFile imageFile)
     {
         var type = nameof(ImageType.BlogCover);
-        var directoryPath = Path.Combine(ImageDirPath, userName, type);
+        var directoryPath = Path.Combine(ImageDirPath, type);
         return await UploadImageAsync(directoryPath, imageFile, type);
     }
 
-    public async Task<string> UploadProfileImageAsync(IFormFile imageFile, string userName)
+    public async Task<string> UploadProfileImageAsync(IFormFile imageFile)
     {
         var type = nameof(ImageType.ProfilePicture);
-        var directoryPath = Path.Combine(ImageDirPath, userName, type);
+        var directoryPath = Path.Combine(ImageDirPath, type);
         return await UploadImageAsync(directoryPath, imageFile, type);
     }
 
-    private static string BuildFileName(string originalName, string type)
+    private string BuildFileName(string originalName, string type)
     {
         return string.Join
         (
@@ -77,7 +77,7 @@ public class ImageService : IImageService
             {
                 DateTimeOffset.Now.ToUnixTimeSeconds().ToString(),
                 type,
-                originalName.Trim('.','_','@', ' ', '#', '/', '\\', '!', '^', '&', '*')
+                originalName.Trim('.','_','@', ' ', '#', '/', '\\', '!', '^', '&', '*'),
             }
         );
     }
@@ -87,11 +87,17 @@ public class ImageService : IImageService
         IFormFile imageFile,
         string type)
     {
-        var formattedName = BuildFileName(imageFile.Name, type);
+        var formattedName = BuildFileName(imageFile.FileName, type);
         var filePath = Path.Combine(directoryPath, formattedName);
-        _logger.LogDebug($"File path of uploaded image is {filePath}.");
+        if (!Directory.Exists(directoryPath))
+        {
+            Directory.CreateDirectory(directoryPath);
+        }
+
         using var stream = File.Create(filePath);
         await imageFile.CopyToAsync(stream);
+        _logger.LogInformation($"File path of uploaded image is {formattedName}.");
+
         return formattedName;
     }
 }

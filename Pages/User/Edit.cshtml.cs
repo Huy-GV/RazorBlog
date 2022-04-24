@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RazorBlog.Data;
-using RazorBlog.Data.ViewModel;
+using RazorBlog.Data.ViewModels;
 using RazorBlog.Interfaces;
 using RazorBlog.Models;
 using System.Linq;

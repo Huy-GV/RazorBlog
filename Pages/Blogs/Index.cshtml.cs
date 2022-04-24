@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RazorBlog.Data;
+using RazorBlog.Data.DTOs;
 using RazorBlog.Models;
+using RazorBlog.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,36 +16,25 @@ namespace RazorBlog.Pages.Blogs
     [AllowAnonymous]
     public class IndexModel : BasePageModel<IndexModel>
     {
-        public IEnumerable<Blog> Blogs { get; set; }
+        private readonly IBlogService _blogService;
+        public IList<BlogDto> Blogs { get; set; }
 
         [BindProperty(SupportsGet = true)]
-        public string SearchString { get; set; }
+        public string? SearchString { get; set; } = null;
 
         public IndexModel(
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
-            ILogger<IndexModel> logger) : base(
+            ILogger<IndexModel> logger,
+            IBlogService blogService) : base(
                 context, userManager, logger)
         {
+            _blogService = blogService;
         }
 
         public async Task OnGetAsync()
         {
-            var blogs = DbContext.Blog
-                .Include(b => b.AppUser)
-                // .Include(b => b.Topic)
-                .AsNoTracking();
-
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                SearchString = SearchString.ToLower().Trim();
-                blogs = blogs.Where(b =>
-                    b.AppUser.UserName.Contains(SearchString) ||
-                    // b.Topic.Name.Contains(SearchString) ||
-                    b.Title.Contains(SearchString));
-            }
-
-            Blogs = await blogs.ToListAsync();
+            Blogs = await _blogService.GetAllBlogsAsync(SearchString);
         }
     }
 }

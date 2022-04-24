@@ -64,7 +64,7 @@ namespace RazorBlog.Pages.User
                     .Where(blog => blog.Author == username && blog.Date.Year == DateTime.Now.Year)
                     .ToList()
                     .Count,
-                ViewCountCurrentYear = blogs
+                ViewCountCurrentYear = (uint)blogs
                     .Where(blog => blog.Author == username && blog.Date.Year == DateTime.Now.Year)
                     .Sum(blogs => blogs.ViewCount),
                 RegistrationDate = user.RegistrationDate.ToString("dd MM yyyy") ?? "",

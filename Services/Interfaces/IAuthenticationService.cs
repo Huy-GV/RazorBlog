@@ -1,6 +1,6 @@
 ﻿namespace RazorBlog.Services.Interfaces
 {
-    using RazorBlog.Data.ViewModel;
+    using RazorBlog.Data.ViewModels;
     using RazorBlog.Services.Communications;
     using System.Threading.Tasks;
 
@@ -14,5 +14,7 @@
         Task<Result> ChangePassword(string password);
 
         Task<Result> DeactivateAccount(string userId);
+
+        Task<bool> UserExists(string? userId);
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 //TODO: merge create/ edit blog viewmodels an create/ edit comment viewmodel
 
-namespace RazorBlog.Data.ViewModel
+namespace RazorBlog.Data.ViewModels
 {
     [Obsolete]
     public class EditCommentViewModel

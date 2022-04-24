@@ -1,7 +1,7 @@
 ﻿namespace RazorBlog.Services.Implementations
 {
     using RazorBlog.Data.DTOs;
-    using RazorBlog.Data.ViewModel;
+    using RazorBlog.Data.ViewModels;
     using RazorBlog.Services.Communications;
     using RazorBlog.Services.Interfaces;
     using System.Collections.Generic;
