@@ -50,7 +50,7 @@
             user.IsDeleted = true;
             await _context.SaveChangesAsync();
 
-            return ResultUtil.Success(new Empty());
+            return ResultUtil.Success();
         }
 
         public async Task<Result<Empty, Error>> Register(RegisterViewModel viewModel)
@@ -68,7 +68,7 @@
             {
                 _logger.LogInformation($"User created a new account with username {viewModel.UserName}.");
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return ResultUtil.Success(new Empty());
+                return ResultUtil.Success();
             }
 
             var errors = result.Errors
@@ -82,7 +82,7 @@
                     return $"{currentError}\n\t{next}";
                 });
 
-            return ResultUtil.Failure<Empty>(ServiceCode.AuthenticationFailure, errors);
+            return ResultUtil.Failure(ServiceCode.AuthenticationFailure, errors);
         }
 
         public async Task<Result<Empty, Error>> SignIn(SignInViewModel viewModel)
@@ -103,7 +103,7 @@
                 return ResultUtil.Failure<Empty>(ServiceCode.AuthenticationFailure, "User is not allowed to sign in.");
             }
 
-            return ResultUtil.Failure<Empty>(ServiceCode.InternalError);
+            return ResultUtil.Failure(ServiceCode.InternalError);
         }
 
         public async Task<bool> UserExists(string? userId)

@@ -3,6 +3,19 @@
     public static class ResultUtil
     {
         /// <summary>
+        /// Returns a success result with a default error object and data of type <typeparamref name="Empty"></typeparamref>
+        /// </summary>
+        /// <returns></returns>
+        public static Result<Empty, Error> Success()
+        {
+            return new Result<Empty, Error>
+            {
+                Code = ServiceCode.Success,
+                Data = new(),
+            };
+        }
+
+        /// <summary>
         /// Returns a success result with a default empty error object and data of type <typeparamref name="TData">TData</typeparamref>
         /// </summary>
         /// <typeparam name="TData"></typeparam>
@@ -17,7 +30,15 @@
             };
         }
 
-        // todo: add failure method accepting empty data
+        public static Result<Empty, Error> Failure(ServiceCode code, string message = "An error occurred.")
+        {
+            return new Result<Empty, Error>
+            {
+                Code = code,
+                Data = new(),
+                Error = new Error(message),
+            };
+        }
 
         /// <summary>
         /// Return an error result with the default Error object.
