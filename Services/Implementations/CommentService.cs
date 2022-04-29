@@ -9,22 +9,27 @@
 
     public class CommentService : ICommentService
     {
-        public Task<Result> CreateCommentAsync(int blogId, CreateCommentViewModel commentViewModel)
+        public Task<Result<int, Error>> CreateCommentAsync(int blogId, CreateCommentViewModel commentViewModel)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<Result> DeleteCommentAsync(int commentId)
+        public Task<Result<Empty, Error>> DeleteCommentAsync(int commentId)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<IList<CommentDto>> GetAllCommentsAsync(int blogId)
+        public Task<Result<IList<CommentDto>, Error>> GetAllCommentsAsync(int blogId)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<Result> UpdateCommentAsync(int commentId, int blogId)
+        public Task<Result<Empty, Error>> UpdateCommentAsync(int commentId, int blogId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        Task<IList<CommentDto>> ICommentService.GetAllCommentsAsync(int blogId)
         {
             throw new System.NotImplementedException();
         }

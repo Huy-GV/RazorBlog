@@ -31,17 +31,18 @@
             _context = context;
         }
 
-        public Task<Result> ChangePassword(string password)
+        public Task<Result<Empty, Error>> ChangePassword(string password)
         {
             throw new System.NotImplementedException();
         }
 
-        public async Task<Result> DeactivateAccount(string userId)
+        public async Task<Result<Empty, Error>> DeactivateAccount(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return AuthenticationResultMapper.Error(ServiceCode.NotFound, "No user with ID {userId} was found");
+                return ResultUtil.Failure<Empty>(ServiceCode.NotFound, $"User with ID {userId} was not found.");
+                //return AuthenticationResultMapper.Error(ServiceCode.NotFound, "No user with ID {userId} was found");
             }
 
             _context.Update(user);
@@ -49,10 +50,10 @@
             user.IsDeleted = true;
             await _context.SaveChangesAsync();
 
-            return AuthenticationResultMapper.Success();
+            return ResultUtil.Success(new Empty());
         }
 
-        public async Task<Result> Register(RegisterViewModel viewModel)
+        public async Task<Result<Empty, Error>> Register(RegisterViewModel viewModel)
         {
             string profileUri = "default";
             var user = new ApplicationUser
@@ -67,7 +68,7 @@
             {
                 _logger.LogInformation($"User created a new account with username {viewModel.UserName}.");
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return AuthenticationResultMapper.Success();
+                return ResultUtil.Success(new Empty());
             }
 
             var errors = result.Errors
@@ -81,10 +82,10 @@
                     return $"{currentError}\n\t{next}";
                 });
 
-            return AuthenticationResultMapper.Error(ServiceCode.AuthenticationFailure, errors);
+            return ResultUtil.Failure<Empty>(ServiceCode.AuthenticationFailure, errors);
         }
 
-        public async Task<Result> SignIn(SignInViewModel viewModel)
+        public async Task<Result<Empty, Error>> SignIn(SignInViewModel viewModel)
         {
             var result = await _signInManager.PasswordSignInAsync(
                     viewModel.UserName,
@@ -94,22 +95,22 @@
 
             if (result.Succeeded)
             {
-                return AuthenticationResultMapper.Success();
+                return ResultUtil.Success(new Empty());
             }
 
             if (result.IsLockedOut || result.IsNotAllowed)
             {
-                return AuthenticationResultMapper.Error(ServiceCode.AuthenticationFailure, "User is not allowed to sign in.");
+                return ResultUtil.Failure<Empty>(ServiceCode.AuthenticationFailure, "User is not allowed to sign in.");
             }
 
-            return AuthenticationResultMapper.Error(ServiceCode.InternalError);
+            return ResultUtil.Failure<Empty>(ServiceCode.InternalError);
         }
 
         public async Task<bool> UserExists(string? userId)
         {
             if (string.IsNullOrEmpty(userId))
             {
-                return false;
+                throw new ArgumentNullException(nameof(userId));
             }
 
             return await _userManager.FindByIdAsync(userId) != null;

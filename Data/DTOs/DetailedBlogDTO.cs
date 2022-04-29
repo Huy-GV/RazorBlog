@@ -17,6 +17,7 @@ namespace RazorBlog.Data.DTOs
         public bool IsHidden { get; set; }
         public ICollection<CommentDto> CommentDtos { get; set; }
 
+        [Obsolete]
         public static DetailedBlogDto From(Blog blog)
         {
             List<CommentDto> commentDtos = new();

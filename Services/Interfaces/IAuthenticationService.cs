@@ -7,13 +7,13 @@
     public interface IAuthenticationService
     {
         // signin, sign out, register, deactivate
-        Task<Result> SignIn(SignInViewModel viewModel);
+        Task<Result<Empty, Error>> SignIn(SignInViewModel viewModel);
 
-        Task<Result> Register(RegisterViewModel viewModel);
+        Task<Result<Empty, Error>> Register(RegisterViewModel viewModel);
 
-        Task<Result> ChangePassword(string password);
+        Task<Result<Empty, Error>> ChangePassword(string password);
 
-        Task<Result> DeactivateAccount(string userId);
+        Task<Result<Empty, Error>> DeactivateAccount(string userId);
 
         Task<bool> UserExists(string? userId);
     }

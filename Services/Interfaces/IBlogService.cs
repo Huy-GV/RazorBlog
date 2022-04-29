@@ -12,14 +12,14 @@ namespace RazorBlog.Services.Interfaces
 
         Task<IList<BlogDto>> GetAllBlogsInSubscribedTopicAsync(string? userId, string? searchString);
 
-        Task<DetailedBlogDto> GetBlogByIdAsync(int blogId);
+        Task<Result<DetailedBlogDto, Error>> GetBlogByIdAsync(int blogId);
 
-        Task<Result> CreateBlogAsync(BlogViewModel viewModel, string? userId);
+        Task<Result<int, Error>> CreateBlogAsync(BlogViewModel viewModel, string? userId);
 
-        Task<Result> HidePostAsync();
+        Task<Result<Empty, Error>> HidePostAsync();
 
-        Task<Result> UpdateBlogAsync(int blogId);
+        Task<Result<int, Error>> UpdateBlogAsync(int blogId);
 
-        Task<Result> DeleteBlogAsync(int blogId);
+        Task<Result<Empty, Error>> DeleteBlogAsync(int blogId);
     }
 }

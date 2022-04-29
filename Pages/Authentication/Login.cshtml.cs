@@ -54,7 +54,7 @@ namespace RazorBlog.Pages.Authentication
                     return LocalRedirect(returnUrl);
                 }
 
-                ModelState.AddModelError("AuthError", result.ErrorMessage);
+                ModelState.AddModelError("AuthError", result.Error.Message);
                 return Page();
             }
 

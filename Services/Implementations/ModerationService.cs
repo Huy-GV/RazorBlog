@@ -11,32 +11,32 @@
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public Task<Result> AssignModerator(int topicId, string userId, DateTime? schedule = null)
+        public Task<Result<Empty, Error>> AssignModerator(int topicId, string userId, DateTime? schedule = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result> BanUserAsync(int topicId, string userId, string moderatorId, DateTime? endDate = null)
+        public Task<Result<Empty, Error>> BanUserAsync(int topicId, string userId, string moderatorId, DateTime? endDate = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result> DeassignModerator(int topicId, string userId, DateTime? schedule = null)
+        public Task<Result<Empty, Error>> DeassignModerator(int topicId, string userId, DateTime? schedule = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result> HideBlogAsync(int blogId, string moderatorId)
+        public Task<Result<Empty, Error>> HideBlogAsync(int blogId, string moderatorId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result> HideCommentAsync(int commentId, string moderatorId)
+        public Task<Result<Empty, Error>> HideCommentAsync(int commentId, string moderatorId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result> UnbanUserAsync(int topicId, string userId, string moderatorId)
+        public Task<Result<Empty, Error>> UnbanUserAsync(int topicId, string userId, string moderatorId)
         {
             throw new NotImplementedException();
         }

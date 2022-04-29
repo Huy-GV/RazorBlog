@@ -33,15 +33,12 @@
             _authenticationService = authenticationService;
         }
 
-        public async Task<Result> CreateBlogAsync(BlogViewModel viewModel, string? userId)
+        public async Task<Result<int, Error>> CreateBlogAsync(BlogViewModel viewModel, string? userId)
         {
             if (!await _authenticationService.UserExists(userId))
             {
-                return new Result
-                {
-                    Code = ServiceCode.InvalidArgument,
-                    ErrorMessage = "User ID must not be null or empty."
-                };
+                // todo: configure default data for int (avoid 0)?
+                return ResultUtil.Failure<int>(ServiceCode.NotFound, $"User with ID {userId} was not found.");
             }
 
             //var option = new TransactionOptions() { IsolationLevel = IsolationLevel.RepeatableRead };
@@ -64,19 +61,14 @@
                 _context.Blog.Add(newBlog);
                 await _context.SaveChangesAsync();
                 // transactionScope.Complete();
-                return new Result { Code = ServiceCode.Success };
+                return ResultUtil.Success(newBlog.Id);
             }
             catch (Exception exception)
             {
                 _logger.LogError($"Exception message: {exception.Message}");
                 // transactionScope.Dispose();
-                return new Result { Code = ServiceCode.InternalError };
+                return ResultUtil.Failure<int>(ServiceCode.InternalError);
             }
-        }
-
-        public Task<Result> DeleteBlogAsync(int blogId)
-        {
-            throw new System.NotImplementedException();
         }
 
         public async Task<IList<BlogDto>> GetAllBlogsAsync(string? searchString)
@@ -115,16 +107,23 @@
             throw new System.NotImplementedException();
         }
 
-        public async Task<DetailedBlogDto> GetBlogByIdAsync(int blogId)
+        public async Task<Result<DetailedBlogDto, Error>> GetBlogByIdAsync(int blogId)
         {
             var blog = await _context.Blog
+                .Include(b => b.Comments)
                 .SingleOrDefaultAsync(b => b.Id == blogId);
 
             if (blog == null)
             {
+                return ResultUtil.Failure<DetailedBlogDto>(ServiceCode.NotFound, $"No blog with ID {blogId} was found.");
             }
 
             await IncrementViewCount(blog);
+
+            return ResultUtil.Success(new DetailedBlogDto
+            {
+                // todo: map dto
+            });
         }
 
         private async Task IncrementViewCount(Blog blog)
@@ -134,14 +133,19 @@
             await _context.SaveChangesAsync();
         }
 
-        public Task<Result> HidePostAsync()
+        public Task<Result<Empty, Error>> HidePostAsync()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Task<Result> UpdateBlogAsync(int blogId)
+        public Task<Result<int, Error>> UpdateBlogAsync(int blogId)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public Task<Result<Empty, Error>> DeleteBlogAsync(int blogId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
