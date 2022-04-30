@@ -1,7 +1,7 @@
 ﻿namespace RazorBlog.Services.Communications
 {
     /// <summary>
-    /// Represents empty returned data.
+    /// Represents empty data.
     /// </summary>
     public record Empty
     {

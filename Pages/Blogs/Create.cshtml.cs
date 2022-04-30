@@ -54,9 +54,12 @@ namespace RazorBlog.Pages.Blogs
             {
                 var userId = _userManager.GetUserId(User);
                 var result = await _blogService.CreateBlogAsync(CreateBlogViewModel, userId);
+                if (result.Succeeded)
+                {
+                    return RedirectToPage("Read", new { id = result.Data });
+                }
 
-                // todo: return to the newly created page?
-                return RedirectToPage("./Index");
+                return Page();
             }
             catch (Exception ex)
             {

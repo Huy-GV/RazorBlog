@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using RazorBlog.Data.Constants;
+using RazorBlog.Services.Communications;
 using System.Threading.Tasks;
 
 namespace RazorBlog.Services.Interfaces
@@ -25,7 +26,6 @@ namespace RazorBlog.Services.Interfaces
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="type"></param>
-        /// <param name="userName"></param>
-        void DeleteImage(string fileName, ImageType type, string userName);
+        Task<Result<Empty, Error>> DeleteImage(string fileName, ImageType type);
     }
 }

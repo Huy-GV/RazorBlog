@@ -61,6 +61,7 @@
                 UserName = viewModel.UserName,
                 EmailConfirmed = true,
                 ProfileImageUri = profileUri,
+                Description = $"Joined on {DateTime.Now:dd MMMM yyyy}",
             };
 
             var result = await _userManager.CreateAsync(user, viewModel.Password);

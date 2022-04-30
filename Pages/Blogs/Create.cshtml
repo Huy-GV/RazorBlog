@@ -16,14 +16,14 @@
         <label asp-for="CreateBlogViewModel.Title">Title</label>
         <input asp-for="CreateBlogViewModel.Title" type="text" required>
         <span asp-validation-for="CreateBlogViewModel.Title" class="error-message"></span>
-        <label asp-for="CreateBlogViewModel.Description">Description</label>
+        <label asp-for="CreateBlogViewModel.Introduction">Description</label>
         <textarea rows="8" cols="50" 
-            asp-for="CreateBlogViewModel.Description" 
+            asp-for="CreateBlogViewModel.Introduction" 
             required
             type="text"
             placeholder="Description">
         </textarea>
-        <span asp-validation-for="CreateBlogViewModel.Description" class="error-message"></span>
+        <span asp-validation-for="CreateBlogViewModel.Introduction" class="error-message"></span>
         <label asp-for="CreateBlogViewModel.CoverImage"></label>
         <input type="file" asp-for="CreateBlogViewModel.CoverImage" accept=".png,.jpg,.jpeg" multiple>
         <span asp-validation-for="CreateBlogViewModel.CoverImage" class="error-message"></span>

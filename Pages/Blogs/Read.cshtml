@@ -62,29 +62,24 @@
                 blogContentClass = "suspended-post";
             }
         }
-        <p class="blog-description">@Model.Blog.Introduction</p>
-        <img src="/images/blogs/@Model.Blog.CoverImageUri">
+        <p class="blog-description">@Model.DetailedBlogDto.Introduction</p>
+        <img src="/images/BlogCover/@Model.DetailedBlogDto.CoverImageUri">
         <p class="blog-content @blogContentClass">@Model.DetailedBlogDto.Content</p>
 
 
     </article>
 </main>
 
-
-@{
-    var author = await UserManager.FindByNameAsync(Model.Blog.Author);
-
-}
 <section class="author-info">
     <div class="profile-header">
-        <img src="/images/profiles/@Model.DetailedBlogDto.AuthorProfilePicture">
+        <img src="/images/profiles/@Model.DetailedBlogDto.AuthorProfileImageUri">
         <span>@Model.DetailedBlogDto.AuthorName</span>
     </div>
 
-    <p>@Model.DetailedBlogDto.Description</p>
+    <p>@Model.DetailedBlogDto.Introduction</p>
 </section>
 
-@if (!isSuspended && User.Identity.IsAuthenticated) 
+@if (!isSuspended && (User.Identity?.IsAuthenticated ?? false)) 
 {
     <form method="post" class="comment-form" asp-page-handler="CreateComment">
         <input asp-for="CreateCommentViewModel.BlogId" value="@Model.Blog.Id" type="hidden" />

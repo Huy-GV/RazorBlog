@@ -17,7 +17,7 @@ namespace RazorBlog.Data.ViewModels
 
         [Required]
         [StringLength(200, MinimumLength = 10)]
-        public string Description { get; set; }
+        public string Introduction { get; set; }
 
         // todo: add validation attribute
         public string TopicName { get; set; }

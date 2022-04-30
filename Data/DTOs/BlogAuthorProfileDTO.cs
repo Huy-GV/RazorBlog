@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 using RazorBlog.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace RazorBlog.Data.DTOs
 {
+    [Obsolete]
     public class BlogAuthorProfileDto : BaseProfileDto
     {
         public string Description { get; set; } = "None";

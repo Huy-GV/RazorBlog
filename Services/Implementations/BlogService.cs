@@ -1,6 +1,5 @@
 ﻿namespace RazorBlog.Services.Implementations
 {
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using RazorBlog.Data;
@@ -13,7 +12,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Transactions;
 
     public class BlogService : IBlogService
     {
@@ -53,7 +51,7 @@
                     Content = viewModel.Content,
                     TopicId = topic.Id,
                     CoverImageUri = imageUri,
-                    Introduction = viewModel.Description,
+                    Introduction = viewModel.Introduction,
                     Date = DateTime.Now,
                     AppUserId = userId,
                 };
@@ -92,7 +90,8 @@
                     CoverImageUri = b.CoverImageUri,
                     Introduction = b.Introduction,
                 })
-                .Where(b => (searchString == null || searchString == string.Empty) ||
+                .Where(b => searchString == null ||
+                        searchString == string.Empty ||
                         b.Title.Contains(searchString) ||
                         b.AuthorName.Contains(searchString) ||
                         b.TopicName.Contains(searchString))
@@ -102,15 +101,12 @@
             return blogs;
         }
 
-        public Task<IList<BlogDto>> GetAllBlogsInSubscribedTopicAsync(string? userId, string? searchString)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<Result<DetailedBlogDto, Error>> GetBlogByIdAsync(int blogId)
         {
             var blog = await _context.Blog
                 .Include(b => b.Comments)
+                .ThenInclude(c => c.AppUser)
+                .Include(b => b.AppUser)
                 .SingleOrDefaultAsync(b => b.Id == blogId);
 
             if (blog == null)
@@ -120,9 +116,36 @@
 
             await IncrementViewCount(blog);
 
+            var blogAuthor = new
+            {
+                UserName = blog.AppUser?.UserName ?? "Deleted User",
+                // todo: un-hardcode default profile pic
+                ProfileImageUri = blog.AppUser?.ProfileImageUri ?? "default.jpg",
+                Description = blog.AppUser?.Description ?? "Deleted User"
+            };
+
             return ResultUtil.Success(new DetailedBlogDto
             {
-                // todo: map dto
+                Id = blogId,
+                Introduction = blog.Introduction,
+                Content = blog.Content,
+                CoverImageUri = blog.CoverImageUri,
+                Date = blog.Date,
+                IsHidden = blog.IsHidden,
+                AuthorDescription = blogAuthor.Description,
+                AuthorName = blogAuthor.UserName,
+                AuthorProfileImageUri = blogAuthor.ProfileImageUri,
+                CommentDtos = blog.Comments
+                    .Select(c => new CommentDto
+                    {
+                        Id = c.Id,
+                        Date = c.Date,
+                        Content = c.Content,
+                        AuthorName = c.AppUser?.UserName ?? "Deleted User",
+                        AuthorProfilePicturePath = c.AppUser?.ProfileImageUri ?? "default.jpg",
+                        IsHidden = c.IsHidden,
+                    })
+                    .ToList()
             });
         }
 
@@ -133,19 +156,58 @@
             await _context.SaveChangesAsync();
         }
 
-        public Task<Result<Empty, Error>> HidePostAsync()
+        public async Task<Result<Empty, Error>> UpdateBlogAsync(int blogId, BlogViewModel viewModel, string userName)
         {
-            throw new NotImplementedException();
+            var blog = await _context.Blog.FindAsync(blogId);
+            if (blog == null)
+            {
+                return ResultUtil.Failure(ServiceCode.NotFound, $"No blog with ID {blogId} was found.");
+            }
+
+            if (viewModel.CoverImage != null)
+            {
+                try
+                {
+                    var deleteResult = await _imageService.DeleteImage(
+                        blog.CoverImageUri,
+                        Data.Constants.ImageType.BlogCover);
+                    if (!deleteResult.Succeeded)
+                    {
+                        return ResultUtil.Failure(ServiceCode.InternalError, "Failed to delete old cover image.");
+                    }
+
+                    blog.CoverImageUri = await _imageService.UploadBlogCoverImageAsync(viewModel.CoverImage);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"Failed to update cover image of blog with ID {blogId}.");
+                    _logger.LogError(ex.Message);
+                }
+            }
+
+            _context.Blog.Update(blog).CurrentValues.SetValues(viewModel);
+            await _context.SaveChangesAsync();
+            return ResultUtil.Success();
         }
 
-        public Task<Result<int, Error>> UpdateBlogAsync(int blogId)
+        public async Task<Result<Empty, Error>> DeleteBlogAsync(int blogId)
         {
-            throw new NotImplementedException();
-        }
+            var blog = await _context.Blog.FindAsync(blogId);
+            if (blog == null)
+            {
+                return ResultUtil.Failure(ServiceCode.NotFound, $"No blog with ID {blogId} was found.");
+            }
 
-        public Task<Result<Empty, Error>> DeleteBlogAsync(int blogId)
-        {
-            throw new NotImplementedException();
+            var imageDeleteResult = await _imageService.DeleteImage(blog.CoverImageUri, Data.Constants.ImageType.BlogCover);
+            if (!imageDeleteResult.Succeeded)
+            {
+                return ResultUtil.Failure(ServiceCode.InternalError, imageDeleteResult.Error.Message);
+            }
+
+            _context.Remove(blog);
+            await _context.SaveChangesAsync();
+
+            return ResultUtil.Success();
         }
     }
 }

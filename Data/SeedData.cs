@@ -32,46 +32,62 @@ namespace RazorBlog.Data
                 {
                     "Technology", "Entertainment", "Health", "Education"
                 };
-            var topics = await context.Topic.Where(t => seededTopicNames.Contains(t.Name)).ToListAsync();
+            var topicNames = await context.Topic
+                .Where(t => seededTopicNames.Contains(t.Name))
+                .Select(t => t.Name)
+                .ToListAsync();
 
-            if (topics.Count != 4)
+            if (!topicNames.Any())
             {
-                context.Topic.RemoveRange(topics);
-                await context.SaveChangesAsync();
                 context.AddRange(new List<Topic>
-            {
-                 new Topic
-                 {
-                    CreationDate = DateTime.Now,
-                    CreatorUserId = adminId,
-                    Name = "Technology",
-                    Description = "Lorem ipsum sed di em dema bent unari",
-                 },
-                 new Topic
-                 {
-                    CreationDate = DateTime.Now,
-                    CreatorUserId = adminId,
-                    Name = "Entertainment",
-                    Description = "Lorem ipsum sed di em dema bent unari",
-                 },
-                 new Topic
-                 {
-                    CreationDate = DateTime.Now,
-                    CreatorUserId = adminId,
-                    Name = "Health",
-                    Description = "Lorem ipsum sed di em dema bent unari",
-                 },
-                 new Topic
-                 {
-                    CreationDate = DateTime.Now,
-                    CreatorUserId = adminId,
-                    Name = "Education",
-                    Description = "Lorem ipsum sed di em dema bent unari",
-                 },
-            });
+                {
+                     new Topic
+                     {
+                        CreationDate = DateTime.Now,
+                        CreatorUserId = adminId,
+                        Name = "Technology",
+                        Description = "Lorem ipsum sed di em dema bent unari",
+                     },
+                     new Topic
+                     {
+                        CreationDate = DateTime.Now,
+                        CreatorUserId = adminId,
+                        Name = "Entertainment",
+                        Description = "Lorem ipsum sed di em dema bent unari",
+                     },
+                     new Topic
+                     {
+                        CreationDate = DateTime.Now,
+                        CreatorUserId = adminId,
+                        Name = "Health",
+                        Description = "Lorem ipsum sed di em dema bent unari",
+                     },
+                     new Topic
+                     {
+                        CreationDate = DateTime.Now,
+                        CreatorUserId = adminId,
+                        Name = "Education",
+                        Description = "Lorem ipsum sed di em dema bent unari",
+                     },
+                });
+
+                await context.SaveChangesAsync();
+                return;
             }
 
-            await context.SaveChangesAsync();
+            var missingTopicNames = seededTopicNames.Except(topicNames);
+            if (!missingTopicNames.Any())
+            {
+                return;
+            }
+
+            await context.Topic.AddRangeAsync(missingTopicNames.Select(t => new Topic()
+            {
+                CreationDate = DateTime.Now,
+                CreatorUserId = adminId,
+                Name = t,
+                Description = "Lorem ipsum sed di em dema bent unari",
+            }));
         }
 
         private static async Task EnsureAdminUser(UserManager<ApplicationUser> userManager)

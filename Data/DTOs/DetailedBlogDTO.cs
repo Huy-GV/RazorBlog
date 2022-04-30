@@ -8,12 +8,15 @@ namespace RazorBlog.Data.DTOs
     {
         public int Id { get; set; }
         public string Title { get; set; }
+
         public string AuthorName { get; set; }
-        public string AuthorProfilePicture { get; set; }
+        public string AuthorProfileImageUri { get; set; }
         public string AuthorDescription { get; set; }
-        public string Description { get; set; }
+        public string Introduction { get; set; }
+
         public string Content { get; set; }
         public DateTime Date { get; set; }
+        public string CoverImageUri { get; set; }
         public bool IsHidden { get; set; }
         public ICollection<CommentDto> CommentDtos { get; set; }
 
@@ -44,8 +47,8 @@ namespace RazorBlog.Data.DTOs
                 Title = blog.Title,
                 AuthorName = blog.Author,
                 AuthorDescription = description,
-                AuthorProfilePicture = blog.AppUser.ProfileImageUri,
-                Description = blog.Introduction,
+                AuthorProfileImageUri = blog.AppUser.ProfileImageUri,
+                Introduction = blog.Introduction,
                 IsHidden = blog.IsHidden,
                 Date = blog.Date,
                 CommentDtos = commentDtos

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using RazorBlog.Data.Constants;
+using RazorBlog.Services.Communications;
 using RazorBlog.Services.Interfaces;
 using System;
 using System.IO;
@@ -26,31 +27,27 @@ public class ImageService : IImageService
 
     private string ImageDirPath => Path.Combine(_webHostEnv.WebRootPath, imageDirectoryName);
 
-    public void DeleteImage(string fileName, ImageType type, string userName)
+    public async Task<Result<Empty, Error>> DeleteImage(string fileName, ImageType type)
     {
         if (fileName == defaultProfilePictureName)
         {
             _logger.LogError($"Attempt to remove default profile picture failed.");
-            return;
+            return ResultUtil.Failure(ServiceCode.InvalidArgument);
         }
 
-        if (string.IsNullOrEmpty(fileName))
-        {
-            _logger.LogError($"Filename is empty.");
-            return;
-        }
-
-        string directoryPath = Path.Combine(ImageDirPath, userName, nameof(type));
+        string directoryPath = Path.Combine(ImageDirPath, nameof(type));
         string filePath = Path.Combine(directoryPath, fileName);
         try
         {
             File.Delete(filePath);
             _logger.LogDebug($"Deleted image of type {nameof(type)} and path {filePath}.");
+            return ResultUtil.Success();
         }
         catch (Exception ex)
         {
-            _logger.LogDebug(ex.Message);
+            _logger.LogError(ex.Message);
             _logger.LogError($"Failed to remove image of type {nameof(type)} with file path: ${filePath}");
+            return ResultUtil.Failure(ServiceCode.InternalError);
         }
     }
 

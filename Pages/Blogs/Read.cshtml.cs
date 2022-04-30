@@ -8,6 +8,7 @@ using RazorBlog.Data.Constants;
 using RazorBlog.Data.DTOs;
 using RazorBlog.Data.ViewModels;
 using RazorBlog.Models;
+using RazorBlog.Services.Interfaces;
 using System;
 using System.Threading.Tasks;
 
@@ -16,6 +17,8 @@ namespace RazorBlog.Pages.Blogs
     [AllowAnonymous]
     public class ReadModel : BasePageModel<ReadModel>
     {
+        private readonly IBlogService _blogService;
+
         [BindProperty]
         public CreateCommentViewModel CreateCommentViewModel { get; set; }
 
@@ -28,9 +31,11 @@ namespace RazorBlog.Pages.Blogs
         public ReadModel(
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
-            ILogger<ReadModel> logger) : base(
+            ILogger<ReadModel> logger,
+            IBlogService blogService) : base(
                 context, userManager, logger)
         {
+            _blogService = blogService;
         }
 
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -40,34 +45,40 @@ namespace RazorBlog.Pages.Blogs
                 return NotFound();
             }
 
-            Blog = await DbContext.Blog
-                .Include(blog => blog.AppUser)
-                .Include(blog => blog.Comments)
-                    .ThenInclude(comment => comment.AppUser)
-                .AsNoTracking()
-                .SingleOrDefaultAsync(blog => blog.Id == id);
+            //Blog = await DbContext.Blog
+            //    .Include(blog => blog.AppUser)
+            //    .Include(blog => blog.Comments)
+            //        .ThenInclude(comment => comment.AppUser)
+            //    .AsNoTracking()
+            //    .SingleOrDefaultAsync(blog => blog.Id == id);
 
-            if (Blog == null)
+            //if (Blog == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //await IncrementViewCountAsync(id.Value);
+            //ViewData["IsSuspended"] = false;
+
+            //DetailedBlogDto = DetailedBlogDto.From(Blog);
+
+            // get this from moderation service?
+            ViewData["IsSuspended"] = false;
+            var result = await _blogService.GetBlogByIdAsync(id.Value);
+            if (result.Succeeded)
+            {
+                DetailedBlogDto = result.Data;
+                return Page();
+            }
+
+            if (result.Code == Services.Communications.ServiceCode.NotFound)
             {
                 return NotFound();
             }
 
-            await IncrementViewCountAsync(id.Value);
-            ViewData["IsSuspended"] = false;
-
-            DetailedBlogDto = DetailedBlogDto.From(Blog);
+            // todo: create a viewmodel that dictatates whether a user can make changes/ comments
 
             return Page();
-        }
-
-        // todo: track this.
-        private async Task IncrementViewCountAsync(int id)
-        {
-            //get blog again to avoid tracking errors
-            var blog = await DbContext.Blog.FindAsync(id);
-            blog.ViewCount++;
-            DbContext.Blog.Update(blog);
-            await DbContext.SaveChangesAsync();
         }
 
         public async Task<IActionResult> OnPostCreateCommentAsync()

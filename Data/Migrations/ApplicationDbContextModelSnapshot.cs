@@ -244,7 +244,7 @@ namespace RazorBlog.Data.Migrations
 
                     b.HasIndex("ModeratorId");
 
-                    b.ToTable("BanTicket");
+                    b.ToTable("BanTicket", (string)null);
                 });
 
             modelBuilder.Entity("RazorBlog.Models.Blog", b =>
@@ -300,7 +300,7 @@ namespace RazorBlog.Data.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("Blog");
+                    b.ToTable("Blog", (string)null);
                 });
 
             modelBuilder.Entity("RazorBlog.Models.Comment", b =>
@@ -340,7 +340,7 @@ namespace RazorBlog.Data.Migrations
 
                     b.HasIndex("ParentCommentId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comment", (string)null);
                 });
 
             modelBuilder.Entity("RazorBlog.Models.ModeratorAssignment", b =>
@@ -367,7 +367,7 @@ namespace RazorBlog.Data.Migrations
 
                     b.HasIndex("ModeratorId");
 
-                    b.ToTable("ModeratorAssignment");
+                    b.ToTable("ModeratorAssignment", (string)null);
                 });
 
             modelBuilder.Entity("RazorBlog.Models.Topic", b =>
@@ -407,7 +407,7 @@ namespace RazorBlog.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Topic");
+                    b.ToTable("Topic", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
