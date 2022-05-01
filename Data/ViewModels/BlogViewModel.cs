@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RazorBlog.Data.ViewModels
 {
-    public class BlogViewModel : PostViewModel
+    public class BlogViewModel
     {
         [Required]
         [StringLength(60, MinimumLength = 10)]
@@ -13,7 +13,7 @@ namespace RazorBlog.Data.ViewModels
 
         [Required]
         [StringLength(2000, MinimumLength = 200)]
-        public override string Content { get; set; }
+        public string Content { get; set; }
 
         [Required]
         [StringLength(200, MinimumLength = 10)]

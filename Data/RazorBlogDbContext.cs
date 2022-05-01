@@ -57,9 +57,6 @@ namespace RazorBlog.Data
                 .HasIndex(t => t.Name)
                 .IsUnique();
 
-            modelBuilder.Entity<Topic>()
-                .HasQueryFilter(cm => !cm.IsDeleted);
-
             #endregion Topic
 
             #region ModeratorAssignment

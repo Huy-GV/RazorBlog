@@ -10,6 +10,7 @@ using RazorBlog.Data.ViewModels;
 using RazorBlog.Models;
 using RazorBlog.Services.Interfaces;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RazorBlog.Pages.Blogs
@@ -18,12 +19,13 @@ namespace RazorBlog.Pages.Blogs
     public class ReadModel : BasePageModel<ReadModel>
     {
         private readonly IBlogService _blogService;
+        private readonly ICommentService _commentService;
 
         [BindProperty]
-        public CreateCommentViewModel CreateCommentViewModel { get; set; }
+        public CommentViewModel CreateCommentViewModel { get; set; }
 
         [BindProperty]
-        public EditCommentViewModel EditCommentViewModel { get; set; }
+        public CommentViewModel EditCommentViewModel { get; set; }
 
         public Blog Blog { get; set; }
         public DetailedBlogDto DetailedBlogDto { get; set; }
@@ -32,9 +34,11 @@ namespace RazorBlog.Pages.Blogs
             RazorBlogDbContext context,
             UserManager<ApplicationUser> userManager,
             ILogger<ReadModel> logger,
-            IBlogService blogService) : base(
+            IBlogService blogService,
+            ICommentService commentService) : base(
                 context, userManager, logger)
         {
+            _commentService = commentService;
             _blogService = blogService;
         }
 
@@ -83,65 +87,69 @@ namespace RazorBlog.Pages.Blogs
 
         public async Task<IActionResult> OnPostCreateCommentAsync()
         {
-            if (!User.Identity.IsAuthenticated)
-                return Challenge();
-
-            if (!ModelState.IsValid)
+            if (!User.Identity?.IsAuthenticated ?? true)
             {
-                Logger.LogError("Model state invalid when submitting comments");
-                //TODO: return an appropriate response
-                return NotFound();
+                return Challenge();
             }
 
+            // todo: modelstate adds a content field??
+            //if (!ModelState.IsValid)
+            //{
+            //    Logger.LogError("Model state invalid when submitting comments");
+            //    return RedirectToPage("/Blogs/Read", new { id = CreateCommentViewModel.BlogId });
+            //}
+
+            // todo: avoid using UM here?
             var user = await UserManager.GetUserAsync(User);
-            var username = user.UserName;
-
-            // var comment = new Comment
-            // {
-            //     Author = user.UserName,
-            //     Content = CreateCommentVM.Content,
-            //     Date = DateTime.Now,
-            //     BlogID = CreateCommentVM.BlogID
-            // };
-
-            var entry = DbContext.Comment.Add(new Comment
+            var result = await _commentService.CreateCommentAsync(CreateCommentViewModel, user.Id);
+            if (result.Succeeded)
             {
-                Date = DateTime.Now,
-                AppUserId = user.Id
-            });
+                return RedirectToPage("/Blogs/Read", new { id = CreateCommentViewModel.BlogId });
+            }
 
-            entry.CurrentValues.SetValues(CreateCommentViewModel);
-            await DbContext.SaveChangesAsync();
+            if (result.Code == Services.Communications.ServiceCode.NotFound)
+            {
+                return NotFound();
+            }
 
             return RedirectToPage("/Blogs/Read", new { id = CreateCommentViewModel.BlogId });
         }
 
         public async Task<IActionResult> OnPostEditCommentAsync(int commentID)
         {
-            if (!User.Identity.IsAuthenticated)
-                return Challenge();
-
-            if (!ModelState.IsValid)
+            if (!User.Identity?.IsAuthenticated ?? true)
             {
-                Logger.LogError("Model state invalid when editting comments");
+                return Challenge();
+            }
+
+            //if (!ModelState.IsValid)
+            //{
+            //    Logger.LogError("Model state invalid when editting comments");
+            //    return RedirectToPage("/Blogs/Read", new { id = CreateCommentViewModel.BlogId });
+            //}
+
+            var userId = await GetUserId();
+            var result = await _commentService.UpdateCommentAsync(commentID, userId, CreateCommentViewModel);
+            if (result.Succeeded)
+            {
+                return RedirectToPage("/Blogs/Read", new { id = CreateCommentViewModel.BlogId });
+            }
+
+            if (result.Code == Services.Communications.ServiceCode.NotFound)
+            {
                 return NotFound();
             }
 
-            var user = await UserManager.GetUserAsync(User);
-            var comment = await DbContext.Comment.FindAsync(commentID);
-            if (user.UserName != comment.Author)
-                return Forbid();
-
-            comment.Content = EditCommentViewModel.Content;
-            await DbContext.SaveChangesAsync();
-
-            return RedirectToPage("/Blogs/Read", new { id = comment.BlogId });
+            return RedirectToPage("/Blogs/Read", new { id = CreateCommentViewModel.BlogId });
         }
 
+        [Obsolete]
         public async Task<IActionResult> OnPostHideBlogAsync(int blogID)
         {
-            if (!User.Identity.IsAuthenticated)
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
                 return Challenge();
+            }
 
             var user = await UserManager.GetUserAsync(User);
             var roles = await UserManager.GetRolesAsync(user);
@@ -163,10 +171,13 @@ namespace RazorBlog.Pages.Blogs
             return RedirectToPage("/Blogs/Read", new { id = blogID });
         }
 
+        [Obsolete]
         public async Task<IActionResult> OnPostHideCommentAsync(int commentID)
         {
-            if (!User.Identity.IsAuthenticated)
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
                 return Challenge();
+            }
 
             var user = await UserManager.GetUserAsync(User);
             var roles = await UserManager.GetRolesAsync(user);
@@ -186,34 +197,56 @@ namespace RazorBlog.Pages.Blogs
 
         public async Task<IActionResult> OnPostDeleteBlogAsync(int blogID)
         {
-            if (!User.Identity.IsAuthenticated)
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
                 return Challenge();
+            }
 
-            var blog = await DbContext.Blog.FindAsync(blogID);
+            var userId = await GetUserId();
+            var result = await _blogService.DeleteBlogAsync(userId, blogID);
+            if (result.Succeeded)
+            {
+                return RedirectToPage("/Blogs/Index");
+            }
 
-            if (User.Identity.Name != blog.Author && !User.IsInRole(Roles.AdminRole))
+            if (result.Code == Services.Communications.ServiceCode.UnauthorizedAction)
+            {
                 return Forbid();
+            }
 
-            DbContext.Blog.Remove(blog);
-            await DbContext.SaveChangesAsync();
+            if (result.Code == Services.Communications.ServiceCode.NotFound)
+            {
+                return NotFound();
+            }
 
-            return RedirectToPage("/Blogs/Index");
+            return Page();
         }
 
         public async Task<IActionResult> OnPostDeleteCommentAsync(int commentID)
         {
-            if (!User.Identity.IsAuthenticated)
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
                 return Challenge();
+            }
 
-            var comment = await DbContext.Comment.FindAsync(commentID);
+            var user = await UserManager.GetUserAsync(User);
+            var result = await _commentService.DeleteCommentAsync(commentID, user.Id);
+            if (result.Succeeded)
+            {
+                return RedirectToPage("/Blogs/Read", new { id = result.Data });
+            }
 
-            if (User.Identity.Name != comment.Author && !User.IsInRole(Roles.AdminRole))
+            if (result.Code == Services.Communications.ServiceCode.UnauthorizedAction)
+            {
                 return Forbid();
+            }
 
-            DbContext.Comment.Remove(comment);
-            await DbContext.SaveChangesAsync();
+            if (result.Code == Services.Communications.ServiceCode.NotFound)
+            {
+                return NotFound();
+            }
 
-            return RedirectToPage("/Blogs/Read", new { id = comment.BlogId });
+            return Page();
         }
     }
 }

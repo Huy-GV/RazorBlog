@@ -1,8 +1,15 @@
-﻿namespace RazorBlog.Data.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RazorBlog.Data.ViewModels
 {
-    public class CommentViewModel : PostViewModel
+    public class CommentViewModel
     {
         public int BlogId { get; set; }
-        public int? ParentCommentId { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string CommentContent { get; set; }
+
+        // public int? ParentCommentId { get; set; }
     }
 }

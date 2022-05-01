@@ -38,7 +38,7 @@
                     <a class="edit-post"
                         asp-page="/Blogs/Edit" 
                         asp-route-username="@user.UserName"
-                        asp-route-blogID="@Model.Blog.Id">Edit</a>
+                        asp-route-blogID="@Model.DetailedBlogDto.Id">Edit</a>
                 }
                 if (userRoles.Contains(Roles.ModeratorRole)
                     && Model.DetailedBlogDto.AuthorName != "admin"
@@ -82,11 +82,12 @@
 @if (!isSuspended && (User.Identity?.IsAuthenticated ?? false)) 
 {
     <form method="post" class="comment-form" asp-page-handler="CreateComment">
-        <input asp-for="CreateCommentViewModel.BlogId" value="@Model.Blog.Id" type="hidden" />
+        <input asp-for="CreateCommentViewModel.BlogId" value="@Model.DetailedBlogDto.Id" type="hidden" />
         <p>
             <textarea rows="5" cols="50"
-                      asp-for="CreateCommentViewModel.Content"
-                      placeholder="Add a comment" required></textarea>
+                name="CreateCommentViewModel.CommentContent"
+                placeholder="Add a comment" required>
+            </textarea>
         </p>
         <input type="submit" value="POST" class="submit-comment" />
     </form>
@@ -100,17 +101,10 @@
     {
         <article class="comment" data-id="@comment.Id">
             @{
-                string authorClass;
-                if (comment.AuthorName == Model.DetailedBlogDto.AuthorName)
-                {
-                    authorClass = "blog-author";
-                }
-                else
-                {
-                    authorClass = "comment-author";
-                }
+                string authorClass = comment.AuthorName == Model.DetailedBlogDto.AuthorName
+                    ? "blog-author"
+                    : "comment-author";
 
-                
                 <div class="author-container">
                     <img src="/images/profiles/@comment.AuthorProfilePicturePath">
                     <span class="@authorClass">@comment.AuthorName</span>
@@ -130,10 +124,10 @@
                         </form>
                     }
                     
-                    if (userRoles.Contains(Roles.ModeratorRole)
-                        && comment.AuthorName != "admin"
-                        && user.UserName != comment.AuthorName
-                        && !comment.IsHidden)
+                    if (userRoles.Contains(Roles.ModeratorRole) || 
+                        userRoles.Contains(Roles.AdminRole) && 
+                        user.UserName != comment.AuthorName && 
+                        !comment.IsHidden)
                     {
                         <form asp-page-handler="HideComment"
                               asp-route-commentID="@comment.Id"
@@ -141,6 +135,7 @@
                             <button class="delete-comment">Hide</button>
                         </form>
                     }
+
                     if (comment.AuthorName == user.UserName)
                     {
                         
@@ -150,7 +145,7 @@
                               method="post"
                               class="edit-comment-form">
                             <textarea rows="5" cols="50"
-                                name="EditCommentVM.Content" 
+                                name="EditCommentViewModel.CommentContent" 
                                 class="edit-comment-textarea hidden-element"
                                 required>@comment.Content</textarea>
                             <button class="edit-comment" 

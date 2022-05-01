@@ -21,5 +21,11 @@ namespace RazorBlog.Pages
             UserManager = userManager;
             Logger = logger;
         }
+
+        protected async System.Threading.Tasks.Task<string> GetUserId()
+        {
+            var user = await UserManager.GetUserAsync(User);
+            return user?.Id ?? string.Empty;
+        }
     }
 }

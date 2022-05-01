@@ -1,37 +1,104 @@
 ﻿namespace RazorBlog.Services.Implementations
 {
-    using RazorBlog.Data.DTOs;
+    using Microsoft.EntityFrameworkCore;
+    using RazorBlog.Data;
     using RazorBlog.Data.ViewModels;
     using RazorBlog.Services.Communications;
     using RazorBlog.Services.Interfaces;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class CommentService : ICommentService
     {
-        public Task<Result<int, Error>> CreateCommentAsync(int blogId, CreateCommentViewModel commentViewModel)
+        private readonly IBlogService _blogService;
+        private readonly RazorBlogDbContext _context;
+        private readonly IAuthenticationService _authenticationService;
+
+        public CommentService(
+            IBlogService blogService,
+            RazorBlogDbContext context,
+            IAuthenticationService authenticationService)
         {
-            throw new System.NotImplementedException();
+            _authenticationService = authenticationService;
+            _context = context;
+            _blogService = blogService;
         }
 
-        public Task<Result<Empty, Error>> DeleteCommentAsync(int commentId)
+        public async Task<Result<int, Error>> CreateCommentAsync(CommentViewModel viewModel, string userId)
         {
-            throw new System.NotImplementedException();
+            if (!await _authenticationService.UserExists(userId))
+            {
+                return ResultUtil.Failure<int>(ServiceCode.NotFound, $"No user with ID {userId} was found.");
+            }
+
+            try
+            {
+                var newComment = new Models.Comment
+                {
+                    AppUserId = userId,
+                    Date = System.DateTime.Now,
+                    Content = viewModel.CommentContent,
+                    BlogId = viewModel.BlogId,
+                };
+
+                _context.Comment.Add(newComment);
+                await _context.SaveChangesAsync();
+
+                return ResultUtil.Success(newComment.Id);
+            }
+            catch
+            {
+                return ResultUtil.Failure<int>(ServiceCode.InternalError);
+            }
         }
 
-        public Task<Result<IList<CommentDto>, Error>> GetAllCommentsAsync(int blogId)
+        public async Task<Result<int, Error>> DeleteCommentAsync(int commentId, string userId)
         {
-            throw new System.NotImplementedException();
+            var comment = await _context.Comment
+                .Include(c => c.AppUser)
+                .SingleAsync(c => c.Id == commentId);
+
+            if (comment == null)
+            {
+                return ResultUtil.Failure<int>(ServiceCode.NotFound);
+            }
+
+            if (userId != comment.AppUser?.Id)
+            {
+                return ResultUtil.Failure<int>(ServiceCode.UnauthorizedAction);
+            }
+
+            var blogId = comment.BlogId;
+            _context.Comment.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return ResultUtil.Success(blogId);
         }
 
-        public Task<Result<Empty, Error>> UpdateCommentAsync(int commentId, int blogId)
+        public async Task<Result<Empty, Error>> UpdateCommentAsync(int commentId, string userId, CommentViewModel viewModel)
         {
-            throw new System.NotImplementedException();
-        }
+            if (!await _blogService.BlogExists(viewModel.BlogId))
+            {
+                return ResultUtil.Failure(ServiceCode.NotFound);
+            }
 
-        Task<IList<CommentDto>> ICommentService.GetAllCommentsAsync(int blogId)
-        {
-            throw new System.NotImplementedException();
+            var comment = await _context.Comment
+                .Include(c => c.AppUser)
+                .SingleAsync(c => c.Id == commentId);
+
+            if (comment == null)
+            {
+                return ResultUtil.Failure(ServiceCode.NotFound);
+            }
+
+            if (userId != comment.AppUser?.Id)
+            {
+                return ResultUtil.Failure(ServiceCode.UnauthorizedAction);
+            }
+
+            _context.Comment.Update(comment).CurrentValues.SetValues(viewModel);
+            await _context.SaveChangesAsync();
+
+            return ResultUtil.Success();
         }
     }
 }

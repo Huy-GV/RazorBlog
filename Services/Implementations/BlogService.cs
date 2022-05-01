@@ -156,19 +156,27 @@
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Result<Empty, Error>> UpdateBlogAsync(int blogId, BlogViewModel viewModel, string userName)
+        public async Task<Result<Empty, Error>> UpdateBlogAsync(int blogId, BlogViewModel viewModel, string userId)
         {
-            var blog = await _context.Blog.FindAsync(blogId);
+            var blog = await _context.Blog
+                .Include(b => b.AppUser)
+                .SingleAsync(b => b.Id == blogId);
+
             if (blog == null)
             {
                 return ResultUtil.Failure(ServiceCode.NotFound, $"No blog with ID {blogId} was found.");
+            }
+
+            if (userId != blog.AppUser?.Id)
+            {
+                return ResultUtil.Failure(ServiceCode.UnauthorizedAction);
             }
 
             if (viewModel.CoverImage != null)
             {
                 try
                 {
-                    var deleteResult = await _imageService.DeleteImage(
+                    var deleteResult = _imageService.DeleteImage(
                         blog.CoverImageUri,
                         Data.Constants.ImageType.BlogCover);
                     if (!deleteResult.Succeeded)
@@ -190,15 +198,23 @@
             return ResultUtil.Success();
         }
 
-        public async Task<Result<Empty, Error>> DeleteBlogAsync(int blogId)
+        public async Task<Result<Empty, Error>> DeleteBlogAsync(string userId, int blogId)
         {
-            var blog = await _context.Blog.FindAsync(blogId);
+            var blog = await _context.Blog
+                .Include(b => b.AppUser)
+                .SingleAsync(b => b.Id == blogId);
+
             if (blog == null)
             {
                 return ResultUtil.Failure(ServiceCode.NotFound, $"No blog with ID {blogId} was found.");
             }
 
-            var imageDeleteResult = await _imageService.DeleteImage(blog.CoverImageUri, Data.Constants.ImageType.BlogCover);
+            if (userId != blog.AppUser?.Id)
+            {
+                return ResultUtil.Failure(ServiceCode.UnauthorizedAction);
+            }
+
+            var imageDeleteResult = _imageService.DeleteImage(blog.CoverImageUri, Data.Constants.ImageType.BlogCover);
             if (!imageDeleteResult.Succeeded)
             {
                 return ResultUtil.Failure(ServiceCode.InternalError, imageDeleteResult.Error.Message);
@@ -209,5 +225,8 @@
 
             return ResultUtil.Success();
         }
+
+        public async Task<bool> BlogExists(int blogId)
+            => await _context.Blog.AnyAsync(b => b.Id == blogId);
     }
 }

@@ -36,6 +36,11 @@
             throw new NotImplementedException();
         }
 
+        public Task<Result<int, Error>> HidePost<TPost>(int id, string moderatorId) where TPost : Post
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Result<Empty, Error>> UnbanUserAsync(int topicId, string userId, string moderatorId)
         {
             throw new NotImplementedException();

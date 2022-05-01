@@ -60,5 +60,13 @@ namespace RazorBlog.Services.Interfaces
             int topicId,
             string userId,
             DateTime? schedule = null);
+
+        /// <summary>
+        /// Hide a post but leave it visible.
+        /// </summary>
+        /// <typeparam name="TPost"></typeparam>
+        /// <param name="id"></param>
+        /// <returns>The ID of the hidden post</returns>
+        public Task<Result<int, Error>> HidePost<TPost>(int id, string moderatorId) where TPost : Models.Post;
     }
 }

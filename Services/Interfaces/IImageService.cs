@@ -26,6 +26,6 @@ namespace RazorBlog.Services.Interfaces
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="type"></param>
-        Task<Result<Empty, Error>> DeleteImage(string fileName, ImageType type);
+        Result<Empty, Error> DeleteImage(string fileName, ImageType type);
     }
 }

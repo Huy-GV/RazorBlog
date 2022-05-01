@@ -27,7 +27,7 @@ public class ImageService : IImageService
 
     private string ImageDirPath => Path.Combine(_webHostEnv.WebRootPath, imageDirectoryName);
 
-    public async Task<Result<Empty, Error>> DeleteImage(string fileName, ImageType type)
+    public Result<Empty, Error> DeleteImage(string fileName, ImageType type)
     {
         if (fileName == defaultProfilePictureName)
         {

@@ -16,6 +16,8 @@ namespace RazorBlog.Services.Interfaces
 
         Task<Result<Empty, Error>> UpdateBlogAsync(int blogId, BlogViewModel viewModel, string userName);
 
-        Task<Result<Empty, Error>> DeleteBlogAsync(int blogId);
+        Task<Result<Empty, Error>> DeleteBlogAsync(string userId, int blogId);
+
+        Task<bool> BlogExists(int blogId);
     }
 }

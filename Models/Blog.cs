@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RazorBlog.Models;
 
-public class Blog : Post, ISoftDeletable
+public class Blog : Post
 {
     public int Id { get; set; }
 
@@ -20,6 +20,4 @@ public class Blog : Post, ISoftDeletable
     public int TopicId { get; set; }
     public Topic Topic { get; set; }
     public ICollection<Comment> Comments { get; set; }
-    public bool IsDeleted { get; set; } = false;
-    public DateTime? DeleteDate { get; set; } = null;
 }

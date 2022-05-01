@@ -8,12 +8,10 @@
 
     public interface ICommentService
     {
-        public Task<IList<CommentDto>> GetAllCommentsAsync(int blogId);
+        public Task<Result<int, Error>> CreateCommentAsync(CommentViewModel commentViewModel, string userId);
 
-        public Task<Result<int, Error>> CreateCommentAsync(int blogId, CreateCommentViewModel commentViewModel);
+        public Task<Result<Empty, Error>> UpdateCommentAsync(int commentId, string userId, CommentViewModel viewModel);
 
-        public Task<Result<Empty, Error>> UpdateCommentAsync(int commentId, int blogId);
-
-        public Task<Result<Empty, Error>> DeleteCommentAsync(int commentId);
+        public Task<Result<int, Error>> DeleteCommentAsync(int commentId, string userId);
     }
 }
